@@ -1,7 +1,48 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation_etre_vivant\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\input\\mouseinputmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\input\\mouseinputmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\pixelgeneric.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\pixelgeneric.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\entite\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\entite\\plant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\entite\\livinbeing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\entite\\livinbeing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\debugtools\\primitiverenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\debugtools\\primitiverenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\menu\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\menu\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\debugtools\\debugrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\debugtools\\debugrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\gamestatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\gamestatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|c:\\users\\admin\\documents\\cfpti\\2026-2027\\atap\\06_projetperso\\simulation-etres-vivants\\simulation\\simulation_etre_vivant\\class\\menu\\hud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ABE9DA2D-F3E7-4032-83F6-D967CF32A592}|Simulation_etre_vivant\\Simulation_etre_vivant.csproj|solutionrelative:simulation_etre_vivant\\class\\menu\\hud.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -18,6 +59,136 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Plant.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Entite\\Plant.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\Entite\\Plant.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Entite\\Plant.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\Entite\\Plant.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwAwAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T13:22:42.823Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LivinBeing.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Entite\\LivinBeing.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\Entite\\LivinBeing.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Entite\\LivinBeing.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\Entite\\LivinBeing.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAewA8AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T13:09:35.145Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MouseInputManager.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Input\\MouseInputManager.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\Input\\MouseInputManager.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Input\\MouseInputManager.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\Input\\MouseInputManager.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAIAwwCUAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T12:03:38.298Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PrimitiveRenderer.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\DebugTools\\PrimitiveRenderer.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\DebugTools\\PrimitiveRenderer.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\DebugTools\\PrimitiveRenderer.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\DebugTools\\PrimitiveRenderer.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAADwvxMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:42:41.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PixelGeneric.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\PixelGeneric.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\PixelGeneric.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\PixelGeneric.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\PixelGeneric.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:44:14.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Hud.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Menu\\Hud.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\Menu\\Hud.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Menu\\Hud.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\Menu\\Hud.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAACFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:41:49.338Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainMenu.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Menu\\MainMenu.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\Menu\\MainMenu.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\Menu\\MainMenu.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\Menu\\MainMenu.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAEwCcAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:21:10.765Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DebugRenderer.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\DebugTools\\DebugRenderer.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\DebugTools\\DebugRenderer.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\DebugTools\\DebugRenderer.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\DebugTools\\DebugRenderer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:25:00.436Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GameStateManager.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\GameStateManager.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Class\\GameStateManager.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Class\\GameStateManager.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Class\\GameStateManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:20:44.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Game1.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Game1.cs",
+              "RelativeDocumentMoniker": "Simulation_etre_vivant\\Game1.cs",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\CFPTI\\2026-2027\\ATAP\\06_ProjetPerso\\Simulation-etres-vivants\\Simulation\\Simulation_etre_vivant\\Game1.cs",
+              "RelativeToolTip": "Simulation_etre_vivant\\Game1.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAAwIwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T11:11:14.053Z",
+              "EditorCaption": ""
             }
           ]
         }
