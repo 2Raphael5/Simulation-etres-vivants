@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,10 +10,10 @@ namespace Class.Entite
 {
     public class LivinBeing
     {
-        protected string Name;
-        protected float Life;
-        protected PixelGeneric Pixel;
-        protected float _timer;
+        public string Name;
+        public float Life;
+        public PixelGeneric Pixel;
+        public float Timer;
 
         public LivinBeing(string name, float life, PixelGeneric pixel)
         {
@@ -46,6 +45,10 @@ namespace Class.Entite
         protected void Die() 
         { 
             Pixel = null;
+        }
+        public virtual LivinBeing Clone(Vector2 position)
+        {
+            return new LivinBeing(Name, Life, new PixelGeneric(position, Color.White));
         }
     }
 }

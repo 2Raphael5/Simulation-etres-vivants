@@ -12,7 +12,6 @@ namespace Class
         MoveRight,
         MoveUp,
         MoveDown,
-        Shoot,
         Pause,
         Confirm,
         Restart,

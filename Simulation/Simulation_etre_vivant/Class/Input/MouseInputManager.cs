@@ -35,7 +35,7 @@ namespace Simulation_etre_vivant.Class.Input
 
         public bool LeftMouseUp()
         {
-            if (_current.LeftButton == ButtonState.Released)
+            if (_current.LeftButton == ButtonState.Released && _previous != _current)
             {
                 return true;
             }
