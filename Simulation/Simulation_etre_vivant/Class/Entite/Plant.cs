@@ -1,21 +1,14 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Class.Entite
 {
-    public class Plant : LivinBeing
+    public class Plant : LivingBeing
     {
-        public float TimeToGrow;
         Plant[] neighbourPlant = new Plant[4];
-        public Plant(string name, float life, PixelGeneric pixel, float timeToGrow) : base(name, life, pixel)
+        public Plant(string name, float life, PixelGeneric pixel, float time) : base(name, life, pixel, time)
         {
-            TimeToGrow = timeToGrow;
-            Timer = timeToGrow;
+            Timer = time;
         }
 
         public override void Update(float deltaTime)
@@ -35,9 +28,9 @@ namespace Class.Entite
             return neighbourPlant[wayToGrow];
 
         }
-        public override LivinBeing Clone(Vector2 position)
+        public override LivingBeing Clone(Vector2 position)
         {
-            return new Plant(Name, Life, new PixelGeneric(position, Color.DarkGreen), TimeToGrow);
+            return new Plant(Name, Life, new PixelGeneric(position, Pixel.Color), (int)TimeBeforeAction);
         }
     }   
 }

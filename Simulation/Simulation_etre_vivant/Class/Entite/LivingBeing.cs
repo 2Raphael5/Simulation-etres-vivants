@@ -1,25 +1,21 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Class.Entite
 {
-    public class LivinBeing
+    public class LivingBeing
     {
         public string Name;
         public float Life;
         public PixelGeneric Pixel;
         public float Timer;
-
-        public LivinBeing(string name, float life, PixelGeneric pixel)
+        public float TimeBeforeAction;
+        public LivingBeing(string name, float life, PixelGeneric pixel, float time)
         {
             Name = name;
             Life = life;
             Pixel = pixel;
+            TimeBeforeAction = time;
         }
 
         public virtual void Update(float deltaTime)
@@ -46,9 +42,9 @@ namespace Class.Entite
         { 
             Pixel = null;
         }
-        public virtual LivinBeing Clone(Vector2 position)
+        public virtual LivingBeing Clone(Vector2 position)
         {
-            return new LivinBeing(Name, Life, new PixelGeneric(position, Color.White));
+            return new LivingBeing(Name, Life, new PixelGeneric(position, Pixel.Color), TimeBeforeAction);
         }
     }
 }

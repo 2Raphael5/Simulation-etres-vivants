@@ -1,28 +1,31 @@
-﻿using Class.Entite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 
 namespace Class.Entite
 {
-    public class Animal : LivinBeing
+    public class Animal : LivingBeing
     {
         public float Speed;
         public float VisionRange;
-        public Animal(string name, float life, PixelGeneric pixel, float speed, float visionRange) : base(name, life, pixel)
+        public float MaxDistanceStep;
+        public Point Goal;
+        public Animal(string name, float life, PixelGeneric pixel, float speed, float visionRange, float time) : base(name, life, pixel, time)
         {
             Speed = speed;
             VisionRange = visionRange;
         }
         public override void Update(float deltaTime)
         {
-            base.Update(deltaTime);
         }
-        public void Move()
+        public virtual void Move()
         {
-
+        }
+        public void DefineGoal(Point point)
+        {
+            Goal = point;
+        }
+        public override LivingBeing Clone(Vector2 position)
+        {
+            return new Animal(Name, Life, new PixelGeneric(position, Pixel.Color), Speed, VisionRange, TimeBeforeAction);
         }
     }
 }

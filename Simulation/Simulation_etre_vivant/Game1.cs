@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Pipelines;
+using System.Linq;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Forms.Application;
@@ -35,28 +36,32 @@ namespace Simulation_etre_vivant
         MouseInputManager _mouseInputManager;
         MouseState currentMouseState;
 
-        List<LivinBeing> allLivingBeing;
-        List<LivinBeing> beingToExist;
+        List<LivingBeing> allLivingBeing;
+        List<LivingBeing> beingToExist;
 
         private const int CellSize = 10;
-        Dictionary<Point, LivinBeing> grid = new Dictionary<Point, LivinBeing>();
+        Dictionary<Point, LivingBeing> grid = new Dictionary<Point, LivingBeing>();
 
-        LivinBeing currentLivingBeing;
+        LivingBeing currentLivingBeing;
         PixelGeneric normalPlantPixel;
         Plant normalPlant;
-
+        Animal testAnimal;
         private bool _wasMouseDown;
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);/*
-            _graphics.PreferredBackBufferHeight = 1080;
-            _graphics.PreferredBackBufferWidth = 1920;*/
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true; 
-            normalPlantPixel = new PixelGeneric(new Vector2(0, 0), Color.DarkGreen); 
-            normalPlant = new Plant("Plant", 10, normalPlantPixel, 0.01f);
+            IsMouseVisible = true;
+            normalPlantPixel = new PixelGeneric(new Vector2(0, 0), Color.DarkGreen);
+            normalPlant = new Plant("Plant", 10, normalPlantPixel, 1f);
+
+            PixelGeneric normalAnimalPixel = new PixelGeneric(new Vector2(0, 0), Color.White);
+            testAnimal = new Animal("Test", 10, normalAnimalPixel, 10, 20, 2f);
         }
 
+        /// <summary>
+        /// Initialise les instances des objets
+        /// </summary>
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -68,11 +73,14 @@ namespace Simulation_etre_vivant
             _font = Content.Load<SpriteFont>("Font/Font");
             PrimitiveRenderer.Initialize(GraphicsDevice);
             _mouseInputManager = new MouseInputManager();
-            allLivingBeing = new List<LivinBeing>();
-            beingToExist = new List<LivinBeing>();
-            currentLivingBeing = normalPlant;
+            allLivingBeing = new List<LivingBeing>();
+            beingToExist = new List<LivingBeing>();
+            currentLivingBeing = testAnimal;
         }
 
+        /// <summary>
+        /// Load les 
+        /// </summary>
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -83,7 +91,7 @@ namespace Simulation_etre_vivant
         {
             _input.Update(gameTime);
 
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalNanoseconds;
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             switch (GameStateManager.CurrentState)
             {
                 case GameState.Menu:
@@ -124,12 +132,14 @@ namespace Simulation_etre_vivant
 
         private void UpdatePlaying(float deltatime)
         {
-            foreach (Plant plant in allLivingBeing)
+            var plants = allLivingBeing.Where(e => e is Plant).ToList();
+            var animals = allLivingBeing.Where(e => e is Animal).ToList();
+            foreach (Plant plant in plants)
             {
                 plant.Timer -= deltatime;
                 if (plant.Timer <= 0f)
                 {
-                    plant.Timer = plant.TimeToGrow;
+                    plant.Timer = plant.TimeBeforeAction;
                     Random rnd = new Random();
 
                     Point newCell = new Point((int)((plant.Pixel.Position.X + (10 * rnd.Next(-1, 2))) / CellSize), (int)((plant.Pixel.Position.Y + (10 * rnd.Next(-1, 2))) / CellSize));
@@ -138,11 +148,35 @@ namespace Simulation_etre_vivant
                     {
                         Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
                         PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
-                        grid[newCell] = new Plant("Plant", 10, pixel, 1); ;
+                        grid[newCell] = plant.Clone(newSnapped);
                         beingToExist.Add(grid[newCell]);
                     }
                 }
+
+
             }
+            foreach (Animal animal in animals)
+            {
+                animal.Timer -= deltatime;
+                if (animal.Timer <= 0f)
+                {
+                    animal.Timer = animal.TimeBeforeAction;
+                    Random rnd = new Random();
+
+                    Point newCell = new Point((int)((animal.Pixel.Position.X + (10 * rnd.Next(-1, 2))) / CellSize), (int)((animal.Pixel.Position.Y + (10 * rnd.Next(-1, 2))) / CellSize));
+
+                    if (!grid.ContainsKey(newCell) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
+                    {
+                        Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
+                        PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
+                        grid[newCell] = animal.Clone(newSnapped);
+                        beingToExist.Add(grid[newCell]);
+                        grid.Remove(new Point((int)animal.Pixel.Position.X, (int)animal.Pixel.Position.Y));
+                        allLivingBeing.Remove(animal);
+                    }
+                }
+            }
+
             bool isDown = _mouseInputManager.LeftMouseDown();
 
             Vector2 mousePos = _mouseInputManager.GetMousePosition();
@@ -153,16 +187,23 @@ namespace Simulation_etre_vivant
 
             if (_wasMouseDown && !isDown && !grid.ContainsKey(cell))
             {
-                LivinBeing newBeing = currentLivingBeing.Clone(snapped);
+                LivingBeing newBeing = currentLivingBeing.Clone(snapped);
                 grid[cell] = newBeing;
                 beingToExist.Add(newBeing);
+                Debug.WriteLine(newBeing.ToString());
+                Debug.WriteLine(currentLivingBeing.ToString());
             }
             _wasMouseDown = isDown;
-            foreach (LivinBeing being in beingToExist)
+            foreach (LivingBeing being in beingToExist)
             {
                 allLivingBeing.Add(being);
-            }          
-            beingToExist.Clear();
+            }
+            beingToExist.Clear();          
+
+            if (_input.IsJustPressed(InputAction.Pause))
+            {
+                currentLivingBeing = normalPlant;
+            }
         }
 
         #endregion
@@ -193,7 +234,7 @@ namespace Simulation_etre_vivant
         }
         private void DrawPlaying(SpriteBatch _spriteBatch)
         {
-            foreach (LivinBeing being in allLivingBeing)
+            foreach (LivingBeing being in allLivingBeing)
             {
                 being.Spawn(_spriteBatch);
             }
@@ -211,12 +252,6 @@ namespace Simulation_etre_vivant
             beingToExist.Clear();
             grid.Clear();
             GameStateManager.ChangeState(GameState.Playing);
-        }
-        private Vector2 SnapToGrid(Vector2 position)
-        {
-            int cellX = (int)(position.X / CellSize);
-            int cellY = (int)(position.Y / CellSize);
-            return new Vector2(cellX * CellSize, cellY * CellSize);
         }
     }
 }
