@@ -25,7 +25,9 @@ namespace Class.Entite
         }
         public override LivingBeing Clone(Vector2 position)
         {
-            return new Animal(Name, Life, new PixelGeneric(position, Pixel.Color), Speed, VisionRange, TimeBeforeAction);
+            Animal animal = new Animal(Name, Life, new PixelGeneric(position, Pixel.Color), Speed, VisionRange, TimeBeforeAction);
+            animal.DefineGoal(Goal);
+            return animal;
         }
     }
 }

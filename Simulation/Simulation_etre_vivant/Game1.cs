@@ -4,16 +4,17 @@ using Class.Entite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
+using SharpDX;
 using Simulation_etre_vivant.Class.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.Pipelines;
 using System.Linq;
-using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Forms.Application;
+using Color = Microsoft.Xna.Framework.Color;
+using Point = Microsoft.Xna.Framework.Point;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 public enum GameState
 {
     Playing,
@@ -42,10 +43,13 @@ namespace Simulation_etre_vivant
         private const int CellSize = 10;
         Dictionary<Point, LivingBeing> grid = new Dictionary<Point, LivingBeing>();
 
-        LivingBeing currentLivingBeing;
         PixelGeneric normalPlantPixel;
         Plant normalPlant;
         Animal testAnimal;
+
+        List<LivingBeing> allSeletableBeing;
+        int indexBeing;
+
         private bool _wasMouseDown;
         public Game1()
         {
@@ -53,10 +57,16 @@ namespace Simulation_etre_vivant
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             normalPlantPixel = new PixelGeneric(new Vector2(0, 0), Color.DarkGreen);
-            normalPlant = new Plant("Plant", 10, normalPlantPixel, 1f);
+            normalPlant = new Plant("Plant", 10, normalPlantPixel, 1000f);
 
             PixelGeneric normalAnimalPixel = new PixelGeneric(new Vector2(0, 0), Color.White);
-            testAnimal = new Animal("Test", 10, normalAnimalPixel, 10, 20, 2f);
+            testAnimal = new Animal("Test", 10, normalAnimalPixel, 10, 20, 250f);
+
+            allSeletableBeing = new List<LivingBeing>
+            {
+                normalPlant,
+                testAnimal
+            };
         }
 
         /// <summary>
@@ -70,28 +80,31 @@ namespace Simulation_etre_vivant
             _input = new InputManager();
             _mainMenu = new MainMenu();
             GameStateManager.ChangeState(GameState.Menu);
-            _font = Content.Load<SpriteFont>("Font/Font");
             PrimitiveRenderer.Initialize(GraphicsDevice);
             _mouseInputManager = new MouseInputManager();
             allLivingBeing = new List<LivingBeing>();
             beingToExist = new List<LivingBeing>();
-            currentLivingBeing = testAnimal;
         }
 
         /// <summary>
-        /// Load les 
+        /// Load le spritebatch et la font
         /// </summary>
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _font = Content.Load<SpriteFont>("Font/Font");
             // TODO: use this.Content to load your game content here
         }
         #region Update
+
+        /// <summary>
+        /// Choisi une méthode a update en permance en fonction de l'état du jeu
+        /// </summary>
+        /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
             _input.Update(gameTime);
-
-            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             switch (GameStateManager.CurrentState)
             {
                 case GameState.Menu:
@@ -110,6 +123,9 @@ namespace Simulation_etre_vivant
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Sélection du menu
+        /// </summary>
         private void UpdateMainMenu()
         {
             if (_input.IsJustPressed(InputAction.Exit))
@@ -130,6 +146,10 @@ namespace Simulation_etre_vivant
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deltatime"></param>
         private void UpdatePlaying(float deltatime)
         {
             var plants = allLivingBeing.Where(e => e is Plant).ToList();
@@ -144,7 +164,7 @@ namespace Simulation_etre_vivant
 
                     Point newCell = new Point((int)((plant.Pixel.Position.X + (10 * rnd.Next(-1, 2))) / CellSize), (int)((plant.Pixel.Position.Y + (10 * rnd.Next(-1, 2))) / CellSize));
 
-                    if (!grid.ContainsKey(newCell) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
+                    if ((!grid.ContainsKey(newCell) || grid[newCell] == null) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
                     {
                         Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
                         PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
@@ -157,17 +177,32 @@ namespace Simulation_etre_vivant
             }
             foreach (Animal animal in animals)
             {
-                animal.Timer -= deltatime;
-                if (animal.Timer <= 0f)
+                Random rnd = new Random();
+                if (animal.Pixel.Position == new Vector2(animal.Goal.X, animal.Goal.Y) || animal.Goal == new Point(0,0))
+                {                    
+                    Point goal = new Point((int)((rnd.NextFloat(0, this.Window.ClientBounds.Width)) / CellSize * 10), (int)((rnd.NextFloat(0, this.Window.ClientBounds.Height)) / CellSize * 10));
+                    animal.DefineGoal(goal);
+                    Debug.WriteLine(animal.Goal);
+                }
+                else
                 {
-                    animal.Timer = animal.TimeBeforeAction;
-                    Random rnd = new Random();
+                    Point newCell = new Point(0,0);
+                    animal.Timer -= deltatime;
 
-                    Point newCell = new Point((int)((animal.Pixel.Position.X + (10 * rnd.Next(-1, 2))) / CellSize), (int)((animal.Pixel.Position.Y + (10 * rnd.Next(-1, 2))) / CellSize));
-
-                    if (!grid.ContainsKey(newCell) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
+                    if (animal.Timer <= 0f)
                     {
-                        Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
+                        animal.Timer = animal.TimeBeforeAction;
+                        if (animal.Pixel.Position.X > animal.Goal.X)
+                        {
+                            newCell = new Point((int)animal.Pixel.Position.X - CellSize, (int)animal.Pixel.Position.Y);
+
+                        }
+                        else if (animal.Pixel.Position.X < animal.Goal.X)
+                        {
+                            newCell = new Point((int)animal.Pixel.Position.X + CellSize, (int)animal.Pixel.Position.Y);
+                        }
+
+                        Vector2 newSnapped = new Vector2(newCell.X, newCell.Y);
                         PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
                         grid[newCell] = animal.Clone(newSnapped);
                         beingToExist.Add(grid[newCell]);
@@ -177,21 +212,20 @@ namespace Simulation_etre_vivant
                 }
             }
 
+            this.Window.Title = this.Window.ClientBounds.Height.ToString();
             bool isDown = _mouseInputManager.LeftMouseDown();
 
             Vector2 mousePos = _mouseInputManager.GetMousePosition();
             Point cell = new Point((int)mousePos.X / CellSize, (int)mousePos.Y / CellSize);
             Vector2 snapped = new Vector2(cell.X * CellSize, cell.Y * CellSize);
 
-            currentLivingBeing.Pixel.Position = snapped;
+            allSeletableBeing[indexBeing].Pixel.Position = snapped;
 
             if (_wasMouseDown && !isDown && !grid.ContainsKey(cell))
             {
-                LivingBeing newBeing = currentLivingBeing.Clone(snapped);
+                LivingBeing newBeing = allSeletableBeing[indexBeing].Clone(snapped);
                 grid[cell] = newBeing;
                 beingToExist.Add(newBeing);
-                Debug.WriteLine(newBeing.ToString());
-                Debug.WriteLine(currentLivingBeing.ToString());
             }
             _wasMouseDown = isDown;
             foreach (LivingBeing being in beingToExist)
@@ -202,7 +236,11 @@ namespace Simulation_etre_vivant
 
             if (_input.IsJustPressed(InputAction.Pause))
             {
-                currentLivingBeing = normalPlant;
+                indexBeing++;
+                if (indexBeing >= allSeletableBeing.Count)
+                {
+                    indexBeing = 0;
+                }
             }
         }
 
@@ -241,7 +279,7 @@ namespace Simulation_etre_vivant
 
             if (_mouseInputManager.LeftMouseDown())
             {
-                currentLivingBeing.Spawn(_spriteBatch);
+                allSeletableBeing[indexBeing].Spawn(_spriteBatch);
             }
         }
 
