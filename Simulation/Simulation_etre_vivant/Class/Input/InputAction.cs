@@ -13,6 +13,7 @@ namespace Class
         MoveUp,
         MoveDown,
         Pause,
+        Accelerate,
         Confirm,
         Restart,
         Debug,

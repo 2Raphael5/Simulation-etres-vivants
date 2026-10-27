@@ -21,6 +21,7 @@ namespace Class
             { InputAction.MoveUp, Keys.Up },
             { InputAction.MoveDown, Keys.Down },
             { InputAction.Pause, Keys.P },
+            { InputAction.Accelerate, Keys.Q},
             { InputAction.Confirm, Keys.Enter },
             { InputAction.Restart, Keys.R },
             { InputAction.Debug, Keys.F1 },

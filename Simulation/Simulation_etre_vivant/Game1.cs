@@ -4,13 +4,12 @@ using Class.Entite;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX;
+using Simulation_etre_vivant.Class.Entite;
 using Simulation_etre_vivant.Class.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Forms.Application;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
@@ -45,7 +44,8 @@ namespace Simulation_etre_vivant
 
         PixelGeneric normalPlantPixel;
         Plant normalPlant;
-        Animal testAnimal;
+        Herbivore normalHerbivore;
+        Carnivore normalCarnivore;
 
         List<LivingBeing> allSeletableBeing;
         int indexBeing;
@@ -57,15 +57,20 @@ namespace Simulation_etre_vivant
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             normalPlantPixel = new PixelGeneric(new Vector2(0, 0), Color.DarkGreen);
-            normalPlant = new Plant("Plant", 10, normalPlantPixel, 1000f);
+            normalPlant = new Plant("Plant", 500, normalPlantPixel, 10000f);
 
-            PixelGeneric normalAnimalPixel = new PixelGeneric(new Vector2(0, 0), Color.White);
-            testAnimal = new Animal("Test", 10, normalAnimalPixel, 10, 20, 250f);
+            PixelGeneric normalHerbivorePixel = new PixelGeneric(new Vector2(0, 0), Color.White);
+            normalHerbivore = new Herbivore("Lapin", 500, normalHerbivorePixel, 10, 20, 100f, 2);
+
+
+            PixelGeneric normalCarnivorePixel = new PixelGeneric(new Vector2(0, 0), Color.OrangeRed);
+            normalCarnivore = new Carnivore("Renard", 500, normalCarnivorePixel, 10, 20, 100f, 2);
 
             allSeletableBeing = new List<LivingBeing>
             {
                 normalPlant,
-                testAnimal
+                normalHerbivore,
+                normalCarnivore
             };
         }
 
@@ -105,6 +110,10 @@ namespace Simulation_etre_vivant
         {
             _input.Update(gameTime);
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (_input.IsDown(InputAction.Accelerate))
+            {
+                deltaTime = (float)gameTime.ElapsedGameTime.TotalMicroseconds;
+            }
             switch (GameStateManager.CurrentState)
             {
                 case GameState.Menu:
@@ -152,67 +161,119 @@ namespace Simulation_etre_vivant
         /// <param name="deltatime"></param>
         private void UpdatePlaying(float deltatime)
         {
-            var plants = allLivingBeing.Where(e => e is Plant).ToList();
-            var animals = allLivingBeing.Where(e => e is Animal).ToList();
-            foreach (Plant plant in plants)
+            var plants = allLivingBeing.OfType<Plant>().ToList();
+            var animals = allLivingBeing.OfType<Animal>().ToList();
+            var herbivores = animals.OfType<Herbivore>().ToList();
+            var carnivores = animals.OfType<Carnivore>().ToList();
+
+            if (plants.Count != 0)
             {
-                plant.Timer -= deltatime;
-                if (plant.Timer <= 0f)
+                foreach (Plant plant in plants)
                 {
-                    plant.Timer = plant.TimeBeforeAction;
-                    Random rnd = new Random();
-
-                    Point newCell = new Point((int)((plant.Pixel.Position.X + (10 * rnd.Next(-1, 2))) / CellSize), (int)((plant.Pixel.Position.Y + (10 * rnd.Next(-1, 2))) / CellSize));
-
-                    if ((!grid.ContainsKey(newCell) || grid[newCell] == null) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
+                    plant.Timer -= deltatime;
+                    if (plant.Timer <= 0f)
                     {
-                        Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
-                        PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
-                        grid[newCell] = plant.Clone(newSnapped);
-                        beingToExist.Add(grid[newCell]);
-                    }
-                }
+                        plant.Timer = plant.TimeBeforeAction;
+                        Random rnd = new Random();
 
+                        Point newCell = new Point((int)((plant.Pixel.Position.X + (CellSize * rnd.Next(-1, 2))) / CellSize), (int)((plant.Pixel.Position.Y + (CellSize * rnd.Next(-1, 2))) / CellSize));
+
+                        if ((!grid.ContainsKey(newCell) || grid[newCell] == null) && newCell.X < this.Window.ClientBounds.Width && newCell.Y < this.Window.ClientBounds.Height)
+                        {
+                            Vector2 newSnapped = new Vector2(newCell.X * CellSize, newCell.Y * CellSize);
+                            PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
+                            grid[newCell] = plant.Clone(newSnapped);
+                            beingToExist.Add(grid[newCell]);
+                        }
+                    }
+
+
+                }
 
             }
-            foreach (Animal animal in animals)
+            try
             {
-                Random rnd = new Random();
-                if (animal.Pixel.Position == new Vector2(animal.Goal.X, animal.Goal.Y) || animal.Goal == new Point(0,0))
-                {                    
-                    Point goal = new Point((int)((rnd.NextFloat(0, this.Window.ClientBounds.Width)) / CellSize * 10), (int)((rnd.NextFloat(0, this.Window.ClientBounds.Height)) / CellSize * 10));
-                    animal.DefineGoal(goal);
-                    Debug.WriteLine(animal.Goal);
-                }
-                else
+                foreach (Animal animal in animals)
                 {
-                    Point newCell = new Point(0,0);
-                    animal.Timer -= deltatime;
-
-                    if (animal.Timer <= 0f)
+                    Random rnd = new Random();
+                    if (animal.Pixel.Position == new Vector2(animal.Goal.X, animal.Goal.Y) || animal.Goal == new Point(0, 0))
                     {
-                        animal.Timer = animal.TimeBeforeAction;
-                        if (animal.Pixel.Position.X > animal.Goal.X)
+                        Point goal = new Point((int)((rnd.Next(0, this.Window.ClientBounds.Width)) / 10 * CellSize), (int)((rnd.Next(0, this.Window.ClientBounds.Height)) / 10 * CellSize));
+                        if (!grid.ContainsKey(goal))
                         {
-                            newCell = new Point((int)animal.Pixel.Position.X - CellSize, (int)animal.Pixel.Position.Y);
+                            animal.DefineGoal(goal);
+                        }                        
+                    }
+                    else
+                    {
+                        Point newCell = new Point(0, 0);
+                        animal.Timer -= deltatime;
 
-                        }
-                        else if (animal.Pixel.Position.X < animal.Goal.X)
+                        if (animal.Timer <= 0f)
                         {
-                            newCell = new Point((int)animal.Pixel.Position.X + CellSize, (int)animal.Pixel.Position.Y);
-                        }
+                            animal.Timer = animal.TimeBeforeAction;
+                            if (animal.Pixel.Position.X > animal.Goal.X)
+                            {
+                                newCell = new Point((int)animal.Pixel.Position.X - CellSize, (int)animal.Pixel.Position.Y);
+                            }
+                            else if (animal.Pixel.Position.X < animal.Goal.X)
+                            {
+                                newCell = new Point((int)animal.Pixel.Position.X + CellSize, (int)animal.Pixel.Position.Y);
+                            }
 
-                        Vector2 newSnapped = new Vector2(newCell.X, newCell.Y);
-                        PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
-                        grid[newCell] = animal.Clone(newSnapped);
-                        beingToExist.Add(grid[newCell]);
+                            if (animal.Pixel.Position.Y > animal.Goal.Y)
+                            {
+                                newCell = new Point((int)animal.Pixel.Position.X, (int)animal.Pixel.Position.Y - CellSize);
+                            }
+                            else if (animal.Pixel.Position.Y < animal.Goal.Y)
+                            {
+                                newCell = new Point((int)animal.Pixel.Position.X, (int)animal.Pixel.Position.Y + CellSize);
+                            }
+
+                            if (!grid.ContainsKey(newCell / CellSize))
+                            {
+                                Vector2 newSnapped = new Vector2(newCell.X, newCell.Y);
+                                PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
+                                grid[newCell] = animal.Clone(newSnapped);
+                                beingToExist.Add(grid[newCell]);
+                                grid.Remove(new Point((int)animal.Pixel.Position.X / CellSize, (int)animal.Pixel.Position.Y / CellSize));
+                                allLivingBeing.Remove(animal);
+                            }
+                            else if ((grid[newCell / CellSize] is Plant && animal is Herbivore)|| (grid[newCell / CellSize] is Herbivore && animal is Carnivore))
+                            {
+                                animal.Life += grid[newCell / CellSize].Life;
+                                allLivingBeing.Remove(grid[newCell / CellSize]);
+                                grid.Remove(newCell / CellSize);
+                            }
+                            else if (animal.NbMaxChild > 0 && grid[newCell / CellSize].GetType() == animal.GetType())
+                            {
+                                animal.NbMaxChild--;
+                                Vector2 newSnapped = new Vector2(newCell.X + 10, newCell.Y + 10);
+                                PixelGeneric pixel = new PixelGeneric(newSnapped, normalPlantPixel.Color);
+                                grid[newCell] = animal.Clone(newSnapped);
+                                grid[newCell].Life = normalHerbivore.Life;
+                                beingToExist.Add(grid[newCell]);
+                            }
+                            else
+                            {
+                                animal.Goal = new Point(0, 0);
+                            }
+                        }
+                    }
+                    if (animal.Life <= 0)
+                    {
                         grid.Remove(new Point((int)animal.Pixel.Position.X, (int)animal.Pixel.Position.Y));
                         allLivingBeing.Remove(animal);
+                        animals.Remove(animal);
                     }
                 }
             }
-
-            this.Window.Title = this.Window.ClientBounds.Height.ToString();
+            catch (Exception e)
+            {
+                //Debug.WriteLine(e.Message);
+            }
+            animals.RemoveAll(a => a.Life == 0);
+            allLivingBeing.RemoveAll(a => a.Life == 0);
             bool isDown = _mouseInputManager.LeftMouseDown();
 
             Vector2 mousePos = _mouseInputManager.GetMousePosition();
@@ -232,7 +293,11 @@ namespace Simulation_etre_vivant
             {
                 allLivingBeing.Add(being);
             }
-            beingToExist.Clear();          
+            foreach (LivingBeing being in allLivingBeing)
+            {
+                being.Update(deltatime);
+            }
+            beingToExist.Clear();
 
             if (_input.IsJustPressed(InputAction.Pause))
             {
