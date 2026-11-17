@@ -9,7 +9,6 @@ using Simulation_etre_vivant.Class.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Application = System.Windows.Forms.Application;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -40,6 +39,11 @@ namespace Simulation_etre_vivant
 
         private const int CellSize = 10;
 
+        /// <summary>
+        /// Distance (en cases) à partir de laquelle un herbivore détecte un carnivore et fuit
+        /// </summary>
+        private const int FleeRadius = 6;
+
         Dictionary<Point, LivingBeing> grid = new Dictionary<Point, LivingBeing>();
 
         private readonly Random _rnd = new Random();
@@ -64,10 +68,10 @@ namespace Simulation_etre_vivant
             normalPlant = new Plant("Plant", 500, normalPlantPixel, 1000f);
 
             PixelGeneric normalHerbivorePixel = new PixelGeneric(new Vector2(0, 0), Color.White);
-            normalHerbivore = new Herbivore("Lapin", 500, normalHerbivorePixel, 20, 20, 100f, 0, 2);
+            normalHerbivore = new Herbivore("Lapin", 500, normalHerbivorePixel, 20, 100f, 0, 2);
 
-            PixelGeneric normalCarnivorePixel = new PixelGeneric(new Vector2(0, 0), Color.OrangeRed);
-            normalCarnivore = new Carnivore("Renard", 1500, normalCarnivorePixel, 10, 20, 100f, 0, 1);
+            PixelGeneric normalCarnivorePixel = new PixelGeneric(new Vector2(0, 0), Color.Orange);
+            normalCarnivore = new Carnivore("Renard", 750, normalCarnivorePixel, 10, 100f, 0, 1);
 
             allSeletableBeing = new List<LivingBeing>
             {
@@ -140,7 +144,7 @@ namespace Simulation_etre_vivant
         {
             if (_input.IsJustPressed(InputAction.Exit))
             {
-                Application.Exit();
+                Exit();
             }
             _mainMenu.Update(_input);
             if (_mainMenu.IsConfirmed(_input))
@@ -168,10 +172,10 @@ namespace Simulation_etre_vivant
 
             UpdatePlants(plants, deltatime);
 
-            // Herbivores : cherchent les plantes
+            // Herbivores : cherchent les plantes et fuient les carnivores
             foreach (Herbivore herbivore in herbivores)
             {
-                UpdateAnimal(herbivore, normalHerbivore, b => b is Plant, deltatime);
+                UpdateAnimal(herbivore, normalHerbivore, b => b is Plant, deltatime, b => b is Carnivore);
             }
 
             // Carnivores : chassent les herbivores
@@ -234,13 +238,14 @@ namespace Simulation_etre_vivant
         }
 
         /// <summary>
-        /// Comportement générique d'un animal : cherche la proie la plus proche,
-        /// avance d'une case vers elle, la mange, ou se reproduit / contourne si bloqué.
+        /// Comportement générique d'un animal : fuit les menaces proches, sinon cherche la proie
+        /// la plus proche, avance d'une case vers elle, la mange, ou se reproduit / contourne si bloqué.
         /// </summary>
         /// <param name="animal">L'animal à mettre à jour</param>
         /// <param name="template">Modèle servant à créer les petits (stats de départ)</param>
         /// <param name="isPrey">Définit ce que l'animal mange</param>
-        private void UpdateAnimal(Animal animal, Animal template, Func<LivingBeing, bool> isPrey, float deltatime)
+        /// <param name="isThreat">Définit ce que l'animal fuit (null = ne fuit rien)</param>
+        private void UpdateAnimal(Animal animal, Animal template, Func<LivingBeing, bool> isPrey, float deltatime, Func<LivingBeing, bool> isThreat = null)
         {
             if (animal.Life <= 0)
             {
@@ -255,6 +260,23 @@ namespace Simulation_etre_vivant
             animal.Timer = animal.TimeBeforeAction;
 
             Point from = ToCell(animal.Pixel.Position);
+
+            // 1) Fuite : prioritaire sur tout le reste
+            if (isThreat != null)
+            {
+                LivingBeing threat = FindNearest(animal, isThreat);
+                if (threat != null && Distance(from, ToCell(threat.Pixel.Position)) <= FleeRadius)
+                {
+                    if (TryFleeStep(from, ToCell(threat.Pixel.Position), out Point fleeCell))
+                    {
+                        MoveAnimal(animal, from, fleeCell);
+                        return;
+                    }
+                    // Acculé : on continue le comportement normal (manger, contourner...)
+                }
+            }
+
+            // 2) Recherche de nourriture
             LivingBeing prey = FindNearest(animal, isPrey);
 
             Point next;
@@ -307,6 +329,53 @@ namespace Simulation_etre_vivant
         }
 
         /// <summary>
+        /// Choisit la case voisine libre qui éloigne le plus de la menace.
+        /// Retourne false si aucune case ne permet de s'éloigner (animal acculé).
+        /// </summary>
+        private bool TryFleeStep(Point from, Point threat, out Point result)
+        {
+            int bestScore = DistanceSquared(from, threat); // il faut faire strictement mieux que la case actuelle
+            var best = new List<Point>();
+
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (dx == 0 && dy == 0)
+                    {
+                        continue;
+                    }
+
+                    Point p = new Point(from.X + dx, from.Y + dy);
+                    if (!InBounds(p) || !IsFree(p))
+                    {
+                        continue;
+                    }
+
+                    int score = DistanceSquared(p, threat);
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        best.Clear();
+                        best.Add(p);
+                    }
+                    else if (score == bestScore && best.Count > 0)
+                    {
+                        best.Add(p);
+                    }
+                }
+            }
+
+            if (best.Count == 0)
+            {
+                result = from;
+                return false;
+            }
+            result = best[_rnd.Next(best.Count)];
+            return true;
+        }
+
+        /// <summary>
         /// Gère le placement d'un être à la souris
         /// </summary>
         private void HandleMousePlacement()
@@ -343,13 +412,28 @@ namespace Simulation_etre_vivant
         }
 
         private bool InBounds(Point cell)
-        { 
+        {
             return cell.X >= 0 && cell.Y >= 0 && cell.X * CellSize < Window.ClientBounds.Width && cell.Y * CellSize < Window.ClientBounds.Height;
         }
 
         private bool IsFree(Point cell)
         {
             return !grid.TryGetValue(cell, out LivingBeing b) || b == null;
+        }
+
+        /// <summary>
+        /// Distance en cases (diagonales comprises)
+        /// </summary>
+        private int Distance(Point a, Point b)
+        {
+            return Math.Max(Math.Abs(a.X - b.X), Math.Abs(a.Y - b.Y));
+        }
+
+        private int DistanceSquared(Point a, Point b)
+        {
+            int dx = a.X - b.X;
+            int dy = a.Y - b.Y;
+            return dx * dx + dy * dy;
         }
 
         /// <summary>
@@ -365,8 +449,7 @@ namespace Simulation_etre_vivant
             {
                 if (being == hunter || being.Life <= 0 || !filter(being)) continue;
 
-                Point c = ToCell(being.Pixel.Position);
-                int dist = Math.Max(Math.Abs(c.X - hc.X), Math.Abs(c.Y - hc.Y));
+                int dist = Distance(ToCell(being.Pixel.Position), hc);
                 if (dist < bestDist)
                 {
                     bestDist = dist;

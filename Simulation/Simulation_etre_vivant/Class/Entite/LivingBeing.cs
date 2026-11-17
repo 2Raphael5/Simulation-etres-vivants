@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Class.Entite
 {
@@ -20,28 +20,22 @@ namespace Class.Entite
 
         public virtual void Update(float deltaTime)
         {
-            if (Life<=0)
+            if (Life <= 0)
             {
                 Die();
             }
         }
+
         public void Spawn(SpriteBatch _spriteBach)
         {
             Pixel.DrawRectangle(_spriteBach);
         }
 
-        public void TakeDamage()
+        public void Die()
         {
-            if (Life > 0)
-            {
-                Life -= 10;
-            }
-        }
-
-        protected void Die() 
-        { 
             Pixel = null;
         }
+
         public virtual LivingBeing Clone(Vector2 position)
         {
             return new LivingBeing(Name, Life, new PixelGeneric(position, Pixel.Color), TimeBeforeAction);

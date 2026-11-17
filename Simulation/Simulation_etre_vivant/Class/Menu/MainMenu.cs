@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Class.DebugTools;
-using Class.Input;
 namespace Class
 {
     public class MainMenu
@@ -16,7 +13,7 @@ namespace Class
             {
                 _selectedIndex++;
                 if (_selectedIndex >= _options.Length)
-{
+                {
                     _selectedIndex = 0;
                 }
             }

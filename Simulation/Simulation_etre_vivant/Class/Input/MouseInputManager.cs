@@ -1,12 +1,6 @@
 ﻿using Class;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Simulation_etre_vivant.Class.Input
 {
@@ -15,7 +9,7 @@ namespace Simulation_etre_vivant.Class.Input
         MouseState _previous;
         MouseState _current;
 
-        Vector2 Position;  
+        Vector2 Position;
         public void Update(GameTime gameTime, MouseState currentState)
         {
             _previous = _current;
@@ -25,7 +19,7 @@ namespace Simulation_etre_vivant.Class.Input
         }
         public bool IsOn(PixelGeneric _pixelgeneric)
         {
-            Rectangle rect = new ((int)_pixelgeneric.Position.X, (int)_pixelgeneric.Position.Y, _pixelgeneric.Width, _pixelgeneric.Height);
+            Rectangle rect = new((int)_pixelgeneric.Position.X, (int)_pixelgeneric.Position.Y, _pixelgeneric.Width, _pixelgeneric.Height);
             if (rect.Intersects(new Rectangle((int)Position.X, (int)Position.Y, 1, 1)))
             {
                 return true;

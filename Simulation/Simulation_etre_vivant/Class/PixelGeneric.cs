@@ -1,7 +1,6 @@
 ﻿using Class.DebugTools;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace Class
 {
@@ -10,7 +9,7 @@ namespace Class
         public Vector2 Position;
         public Color OriginalColor;
         public Color Color;
-        public int Height  = 10;
+        public int Height = 10;
         public int Width = 10;
         private System.Drawing.Color white;
 
@@ -29,7 +28,7 @@ namespace Class
 
         public void DrawRectangle(SpriteBatch spriteBatch, int thickness = 10)
         {
-            Rectangle rect = new ((int)Position.X, (int)Position.Y, Width, Height);
+            Rectangle rect = new((int)Position.X, (int)Position.Y, Width, Height);
             PrimitiveRenderer.DrawRectangle(spriteBatch, rect, Color, thickness);
         }
     }

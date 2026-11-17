@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Class
+﻿namespace Class
 {
     public static class GameStateManager
     {
@@ -18,4 +12,4 @@ namespace Class
             return CurrentState == state;
         }
     }
-    }
+}

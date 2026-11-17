@@ -1,12 +1,7 @@
 ﻿using Class.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Class
@@ -46,7 +41,7 @@ namespace Class
             _keyboard.Update(gameTime, Keyboard.GetState());
             _previousGamePad = _currentGamePad;
             _currentGamePad = GamePad.GetState(PlayerIndex.One);
-            
+
         }
         public bool IsDown(InputAction action)
         {
