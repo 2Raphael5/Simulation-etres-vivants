@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Simulation_etre_vivant.Class.Entite
 {
-    internal class Herbivore : Animal
+    public class Herbivore : Animal
     {
         public Point Goal;
         public Herbivore(string name, float life, PixelGeneric pixel, float speed,float time, int nbChild, int nbMaxChild) : base(name, life, pixel, speed, time, nbChild, nbMaxChild)

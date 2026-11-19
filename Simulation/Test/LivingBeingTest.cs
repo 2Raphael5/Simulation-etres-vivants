@@ -8,13 +8,14 @@ namespace Test;
 public class LivingBeingTest
 {
     [TestMethod]
-    public void Clone_PixelGenericPosition_NewLivingBeing()
+    public void Clone_PixelPosition_NewLivingBeing()
     {
         //ARRANGE
         List<LivingBeing> livingBeings = new List<LivingBeing>
         {
             new LivingBeing("test", 10, new PixelGeneric(new Vector2(0,0), Color.Blue), 10)
         };
+
         //ACT
         livingBeings.Add(livingBeings[0].Clone(livingBeings[0].Pixel.Position));
 
@@ -23,23 +24,39 @@ public class LivingBeingTest
     }
 
     [TestMethod]
-    public void Die_PixelGenericIsNull()
+    public void Die_PixelIsNull()
     {
         //ARRANGE
         LivingBeing livingBeing = new LivingBeing("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
+
         //ACT
         livingBeing.Die();
+
         //ASSERT
         Assert.IsNull(livingBeing.Pixel);
     }
 
     [TestMethod]
-    public void Die_PixelGenericIsNotNull() 
+    public void Update_LifeIs10_PixelIsNull()
     {
         //ARRANGE
         LivingBeing livingBeing = new LivingBeing("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
         //ACT
-        
+        livingBeing.Update(0f);
+
         //ASSERT
+        Assert.IsNotNull(livingBeing.Pixel);
+    }
+
+    [TestMethod]
+    public void Update_LifeIs0_PixelIsNull() 
+    {
+        //ARRANGE
+        LivingBeing livingBeing = new LivingBeing("test", 0, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
+        //ACT
+        livingBeing.Update(0f);
+
+        //ASSERT
+        Assert.IsNull(livingBeing.Pixel);
     }
 }

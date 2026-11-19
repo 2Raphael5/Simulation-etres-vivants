@@ -1,14 +1,13 @@
 ﻿using Class;
 using Class.Entite;
 using Microsoft.Xna.Framework;
-using Simulation_etre_vivant;
 namespace Test
 {
     [TestClass]
     public sealed class AnimalTest
     {
         [TestMethod]
-        public void AnimalClone_AnimalPixelPosition_NewAnimalAddedToList()
+        public void Clone_PixelPosition_NewAnimalAddedToList()
         {
             //ARRANGE
             PixelGeneric pixel = new PixelGeneric(new Vector2(0,0), Color.Blue);
@@ -22,6 +21,19 @@ namespace Test
 
             //ASSERT
             Assert.AreEqual(2, animals.Count);
+        }
+
+        [TestMethod]
+        public void Update_LifeIsReducedBy1()
+        {
+            //ARRANGE
+            Animal animal = new Animal("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10, 10, 0, 2);
+            
+            //ACT
+            animal.Update(0f);
+
+            //ASSERT
+            Assert.AreEqual(9, animal.Life);
         }
     }
 }
