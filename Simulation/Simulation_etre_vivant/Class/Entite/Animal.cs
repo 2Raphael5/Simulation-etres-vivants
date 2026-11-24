@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace Class.Entite
 {
@@ -15,13 +16,14 @@ namespace Class.Entite
             NbChild = nbChild;
             NbMaxChild = nbMaxChild;
         }
-        public override void Update(float deltaTime)
+        public virtual void Update()
         {
             Life--;
+            Console.WriteLine(Life);
         }
         public override LivingBeing Clone(Vector2 position)
         {
-            Animal animal = new Animal(Name, Life, new PixelGeneric(position, Pixel.Color), Speed,TimeBeforeAction, 0, NbMaxChild);
+            Animal animal = new Animal(Name, Life, new PixelGeneric(position, Pixel.Color), Speed, TimeBeforeAction, 0, NbMaxChild);
             animal.Timer = this.Timer;
             return animal;
         }

@@ -1,0 +1,207 @@
+%======================================================================
+% _config_base.tex
+% Configuration globale des documents CFPT
+%======================================================================
+
+
+%======================================================================
+% 1 — TYPOGRAPHIE ET LANGUE
+%======================================================================
+
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[french]{varioref}
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+
+%======================================================================
+% 2 — MATHÉMATIQUES
+%======================================================================
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+
+%======================================================================
+% 3 — GRAPHISMES
+%======================================================================
+
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{subcaption}
+
+\DeclareGraphicsExtensions{.png,.PNG,.jpg,.JPG}
+
+\graphicspath{{./medias/}{./captures/}{./includes/logo_default/}}
+
+
+%======================================================================
+% 4 — TABLEAUX ET MISE EN PAGE
+%======================================================================
+
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage{parskip}
+
+\usepackage{geometry}
+
+\geometry{
+	left=2cm,
+	right=2cm,
+	top=2cm,
+	bottom=2cm
+}
+
+
+%======================================================================
+% 5 — BOÎTES / CODE / OUTILS
+%======================================================================
+
+\usepackage{fancyvrb}
+\usepackage{marginnote}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{etoolbox}
+\usepackage{minitoc}
+\usepackage{float}
+\usepackage{listings}
+
+\tcbuselibrary{skins,breakable}
+
+
+%======================================================================
+% 6 — HYPERLIENS
+%======================================================================
+
+\usepackage[
+colorlinks=true,
+linkcolor=blue,
+urlcolor=blue
+]{hyperref}
+
+
+%======================================================================
+% 7 — DATE / HEURE
+%======================================================================
+
+\usepackage{datetime2}
+
+\DTMsetdatestyle{ddmmyyyy}
+
+\renewcommand{\DTMdisplaydate}[4]{#3/#2/#1}
+\renewcommand{\DTMdisplaytime}[3]{#1:#2}
+
+\DTMsetup{
+	showzone=false,
+	showseconds=false
+}
+
+
+%======================================================================
+% 8 — CONFIGURATION DOCUMENTAIRE
+%======================================================================
+
+\newif\iftitlepagelogo
+
+\usepackage{pgfkeys}
+
+\pgfkeys{
+	/doc/.is family,
+	/doc/.cd,
+	%------------------------------------------------
+	% Toggles
+	%------------------------------------------------
+	titlepagelogo/.is if=titlepagelogo,
+	%------------------------------------------------
+	% Métadonnées
+	%------------------------------------------------
+	author/.estore in=\DocAuthor,
+	email/.estore in=\DocEmail,
+	title/.estore in=\DocTitle,
+	subtitle/.estore in=\DocSubtitle,
+	domaine/.estore in=\DocDomaine,
+	year/.estore in=\DocYear,
+	logo/.estore in=\DocLogo,
+	keywords/.estore in=\DocKeywords,
+	%------------------------------------------------
+	% Configuration interne
+	%------------------------------------------------
+	embedsourcebasepath/.estore in=\embedsourcebasepath,
+	%------------------------------------------------
+	% HEADER / FOOTER CONFIGURABLE
+	% Important : store in (pas estore in)
+	% pour éviter l’expansion prématurée de \DTMnow,
+	% \pageref, \rightmark, etc.
+	%------------------------------------------------
+	header-left/.store in=\DocHeaderLeft,
+	header-center/.store in=\DocHeaderCenter,
+	header-right/.store in=\DocHeaderRight,
+	footer-left/.store in=\DocFooterLeft,
+	footer-center/.store in=\DocFooterCenter,
+	footer-right/.store in=\DocFooterRight
+}
+
+\newcommand{\DocSetup}[1]{\pgfkeys{/doc,#1}}
+
+
+%======================================================================
+% 9 — VALEURS PAR DÉFAUT
+%======================================================================
+
+\DocSetup{
+	titlepagelogo=true,
+	author={Stéphane Garchery},
+	email={stephane.garchery@edu.ge.ch},
+	title={Titre},
+	subtitle={Sous titre},
+	domaine={},
+	year={2025--2026},
+	logo={},
+	keywords={},
+	embedsourcebasepath={soluce},
+	header-left={\footnotesize\textbf{\DocDomaine}},
+	header-center={\footnotesize\DocTitle},
+	header-right={\tiny\nouppercase{\rightmark}},
+	footer-left={\tiny\DocEmail},
+	footer-center={\tiny document généré le \DTMnow},
+	footer-right={\scriptsize Page~\thepage~/~\pageref{LastPage}}
+}
+
+
+%======================================================================
+% 10 — HEADERS / FOOTERS
+%======================================================================
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\fancyhead[L]{\DocHeaderLeft}
+\fancyhead[C]{\DocHeaderCenter}
+\fancyhead[R]{\DocHeaderRight}
+
+\fancyfoot[L]{\DocFooterLeft}
+\fancyfoot[C]{\DocFooterCenter}
+\fancyfoot[R]{\DocFooterRight}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+
+
+%======================================================================
+% 11 — EXTENSIONS CFPT
+%======================================================================
+
+\input{includes/inc_colors}
+\input{includes/inc_listings}
+\input{includes/inc_hyperref}

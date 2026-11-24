@@ -7,7 +7,7 @@ namespace Simulation_etre_vivant.Class.Entite
     public class Herbivore : Animal
     {
         public Point Goal;
-        public Herbivore(string name, float life, PixelGeneric pixel, float speed,float time, int nbChild, int nbMaxChild) : base(name, life, pixel, speed, time, nbChild, nbMaxChild)
+        public Herbivore(string name, float life, PixelGeneric pixel, float speed, float time, int nbChild, int nbMaxChild) : base(name, life, pixel, speed, time, nbChild, nbMaxChild)
         {
         }
         public void DefineGoal(Point goal)

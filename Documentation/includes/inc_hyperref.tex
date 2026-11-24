@@ -1,0 +1,23 @@
+%-------------------------------------------------------------------------------------
+% Métadonnées PDF et style des liens (hyperref)
+%-------------------------------------------------------------------------------------
+\hypersetup{
+	% Titre du document dans les propriétés PDF
+	pdftitle={\DocTitle{} : \DocSubtitle{}},
+	% Auteur du document (nom + email) dans les propriétés PDF
+	pdfauthor={\DocAuthor{} -- \DocEmail{}},
+	% Sujet / description courte (domaine + année scolaire)
+	pdfsubject={\DocDomaine{} -- \DocYear{}},
+	% Mots-clés pour l’indexation du PDF (recherche, catalogage, etc.)
+	pdfkeywords={\DocKeywords},
+	% Informations techniques sur la génération du PDF (producteur)
+	pdfproducer={MiKTeX + pdfTeX}, % facultatif : rempli automatiquement si omis
+	% Informations techniques sur la génération du PDF (créateur)
+	pdfcreator={LaTeX with hyperref}, % facultatif : idem
+	% Style des liens : true = liens colorés, false = liens encadrés
+	colorlinks=true,
+	% Couleur des liens internes (table des matières, renvois, etc.)
+	linkcolor=blue,
+	% Couleur des liens externes (URL, adresses web)
+	urlcolor=blue
+}

@@ -8,7 +8,7 @@ namespace Test
     public sealed class HerbivoreTest
     {
         [TestMethod]
-        public void Clone_PixelPosition_NewPlantAddedToList()
+        public void Clone_PixelPosition_NewHerbivoreAddedToList()
         {
             //ARRANGE
             PixelGeneric pixel = new PixelGeneric(new Vector2(0,0), Color.Blue);

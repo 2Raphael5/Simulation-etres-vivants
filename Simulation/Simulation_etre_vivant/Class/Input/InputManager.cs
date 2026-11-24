@@ -1,8 +1,7 @@
-﻿using Class.Input;
+﻿using System.Collections.Generic;
+using Class.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Class
 {

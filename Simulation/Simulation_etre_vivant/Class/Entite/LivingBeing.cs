@@ -18,14 +18,6 @@ namespace Class.Entite
             TimeBeforeAction = time;
         }
 
-        public virtual void Update(float deltaTime)
-        {
-            if (Life <= 0)
-            {
-                Die();
-            }
-        }
-
         public void Spawn(SpriteBatch _spriteBach)
         {
             Pixel.DrawRectangle(_spriteBach);

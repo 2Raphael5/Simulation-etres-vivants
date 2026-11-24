@@ -8,7 +8,7 @@ namespace Test;
 public class LivingBeingTest
 {
     [TestMethod]
-    public void Clone_PixelPosition_NewLivingBeing()
+    public void Clone_PixelPosition_NewLivingBeingAddedToList()
     {
         //ARRANGE
         List<LivingBeing> livingBeings = new List<LivingBeing>
@@ -31,30 +31,6 @@ public class LivingBeingTest
 
         //ACT
         livingBeing.Die();
-
-        //ASSERT
-        Assert.IsNull(livingBeing.Pixel);
-    }
-
-    [TestMethod]
-    public void Update_LifeIs10_PixelIsNull()
-    {
-        //ARRANGE
-        LivingBeing livingBeing = new LivingBeing("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
-        //ACT
-        livingBeing.Update(0f);
-
-        //ASSERT
-        Assert.IsNotNull(livingBeing.Pixel);
-    }
-
-    [TestMethod]
-    public void Update_LifeIs0_PixelIsNull() 
-    {
-        //ARRANGE
-        LivingBeing livingBeing = new LivingBeing("test", 0, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
-        //ACT
-        livingBeing.Update(0f);
 
         //ASSERT
         Assert.IsNull(livingBeing.Pixel);

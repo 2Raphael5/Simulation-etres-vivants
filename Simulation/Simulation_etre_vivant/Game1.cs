@@ -1,17 +1,14 @@
-﻿using Class;
-using Class.DebugTools;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Class;
 using Class.Entite;
+using Class.Renderer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Simulation_etre_vivant.Class.Entite;
 using Simulation_etre_vivant.Class.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Color = Microsoft.Xna.Framework.Color;
-using Point = Microsoft.Xna.Framework.Point;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 public enum GameState
 {
@@ -194,16 +191,26 @@ namespace Simulation_etre_vivant
 
             foreach (LivingBeing being in allLivingBeing)
             {
-                being.Update(deltatime);
+                if (being is Animal animal)
+                {
+                    animal.Update();
+                }
             }
 
-            // Nettoyage des morts (faim, etc.)
             foreach (LivingBeing dead in allLivingBeing.Where(b => b.Life <= 0).ToList())
             {
                 RemoveBeing(dead);
             }
 
-            if (_input.IsJustPressed(InputAction.Pause))
+            if (_input.IsJustPressed(InputAction.MoveLeft))
+            {
+                indexBeing--;
+                if (indexBeing < 0)
+                {
+                    indexBeing = allSeletableBeing.Count -1;
+                }
+            }
+            else if (_input.IsJustPressed(InputAction.MoveRight))
             {
                 indexBeing++;
                 if (indexBeing >= allSeletableBeing.Count)
@@ -261,7 +268,6 @@ namespace Simulation_etre_vivant
 
             Point from = ToCell(animal.Pixel.Position);
 
-            // 1) Fuite : prioritaire sur tout le reste
             if (isThreat != null)
             {
                 LivingBeing threat = FindNearest(animal, isThreat);
@@ -272,17 +278,14 @@ namespace Simulation_etre_vivant
                         MoveAnimal(animal, from, fleeCell);
                         return;
                     }
-                    // Acculé : on continue le comportement normal (manger, contourner...)
                 }
             }
 
-            // 2) Recherche de nourriture
             LivingBeing prey = FindNearest(animal, isPrey);
 
             Point next;
             if (prey == null)
             {
-                // Rien à manger : déplacement aléatoire
                 next = new Point(from.X + _rnd.Next(-1, 2), from.Y + _rnd.Next(-1, 2));
             }
             else
@@ -301,14 +304,12 @@ namespace Simulation_etre_vivant
             {
                 if (isPrey(occupant))
                 {
-                    // Repas : on gagne la vie de la proie
                     animal.Life += occupant.Life;
                     RemoveBeing(occupant);
                     MoveAnimal(animal, from, next);
                 }
                 else if (occupant.GetType() == animal.GetType() && animal.NbChild < animal.NbMaxChild)
                 {
-                    // Même espèce sur le chemin : reproduction
                     if (TryFindFreeNeighbor(from, out Point childCell))
                     {
                         animal.NbChild++;
@@ -334,7 +335,7 @@ namespace Simulation_etre_vivant
         /// </summary>
         private bool TryFleeStep(Point from, Point threat, out Point result)
         {
-            int bestScore = DistanceSquared(from, threat); // il faut faire strictement mieux que la case actuelle
+            int bestScore = DistanceSquared(from, threat);
             var best = new List<Point>();
 
             for (int dx = -1; dx <= 1; dx++)

@@ -1,0 +1,263 @@
+\documentclass[10pt,a4paper]{article}
+
+%-------------------------------------------------------------------------------------
+% CONFIGURATION GLOBALE DU TEMPLATE
+%
+% Ce fichier charge :
+%   - les packages LaTeX nécessaires
+%   - la mise en page
+%   - les styles de code (PHP, C#, SQL, etc.)
+%   - les en-têtes et pieds de page
+% NE PAS MODIFIER ce fichier.
+%-------------------------------------------------------------------------------------
+\input{includes/_config_base.tex}
+
+
+%=====================================================================================
+% CONFIGURATION DU DOCUMENT
+%
+% Cette section doit être adaptée pour chaque document.
+% Vous devez modifier ces champs pour personnaliser leur travail.
+%=====================================================================================
+\DocSetup{
+	%---------------------------------------------------------------------------------
+	% INFORMATIONS SUR L'AUTEUR
+	%---------------------------------------------------------------------------------
+	author   = {Raphaël Ahimon},          % Nom de l'auteur du document
+	email    = {raphael.ahmn@edu.ge.ch},% Email de contact
+	%---------------------------------------------------------------------------------
+	% TITRE DU DOCUMENT
+	%---------------------------------------------------------------------------------
+	title    = {Simulation d'être vivant},  % Titre principal
+	subtitle = {Application 2D},                   % Sous-titre du document
+	% Domaine / module (affiché dans l'en-tête)
+	% Exemple : C#, PHP, SQL, MonoGame, TPI, etc.
+	domaine  = {MonoGame},
+	% Année scolaire ou projet
+	year     = {2026 -- 2027},
+	%---------------------------------------------------------------------------------
+	% ÉLÉMENTS GRAPHIQUES
+	%---------------------------------------------------------------------------------
+	% Logo affiché sur la page de garde
+	% Laisser {} si aucun logo n'est nécessaire
+	logo = {monogame_logo},
+	%---------------------------------------------------------------------------------
+	% MÉTADONNÉES DU DOCUMENT
+	%---------------------------------------------------------------------------------
+	% Mots clés utilisés dans les métadonnées du PDF
+	keywords = {mots clefs},
+	%---------------------------------------------------------------------------------
+	% CONFIGURATION INTERNE DU TEMPLATE
+	%---------------------------------------------------------------------------------
+	% Chemin de base pour les fichiers sources affichés dans le document
+	% Exemple :
+	%   soluce/Projet/Program.cs
+	embedsourcebasepath = {soluce},
+	%---------------------------------------------------------------------------------
+	% CONFIGURATION DES EN-TÊTES ET PIEDS DE PAGE
+	%
+	% Les six zones suivantes contrôlent l'affichage dans les marges du document.
+	%
+	%   Header : gauche / centre / droite
+	%   Footer : gauche / centre / droite
+	%---------------------------------------------------------------------------------
+	header-left   = {\footnotesize\textbf{\DocDomaine}},   % ex : "C#", "PHP", "SQL"
+	header-center = {\footnotesize\DocTitle},              % titre du document
+	header-right  = {\tiny\nouppercase{\rightmark}},       % section courante
+	footer-left   = {\tiny\DocEmail},                      % email de contact
+	footer-center = {\tiny document généré le \DTMnow},    % date automatique
+	footer-right  = {\scriptsize Page~\thepage~/~\pageref{LastPage}} % pagination
+}
+
+
+%-------------------------------------------------------------------------------------
+% DÉBUT DU DOCUMENT
+%-------------------------------------------------------------------------------------
+
+\begin{document}
+
+	\include{includes/_titlepage.tex}
+
+	\tableofcontents
+
+	\newpage
+	\section{Introduction}
+	
+	\subsection{Contexte}
+	Dans le cadre de l'atelier application du CFPTI en 4e année, nous avons dû créer une application Csharp en utilisant Monogame. J'ai choisi de faire une simulation du cycle de vie et de la chaine alimentaire.
+	
+	
+	\subsection{Présentation du projet}	
+	Ce projet permet de voir comment différentes espèce de vie cohabite entre elles. L'utilisateur pourrat choisir entre 3 forme de vie (plante, herbivore, carnivore) et les placer dans l'espace de simulation comme bon lui semble. Une fois les animaux placé, chacun aura des actions a faire (la plante grandit, les herbivores mangent et se cache des prédateurs, et ceux-ci chassent les herbivores).
+	
+	Les plantes pousse et grandissent sans avoir besoin de rien(pour simuler le fait qu'elle utilise les minéraux dans le sol). Les herbivores mangent les plantes et fuit les carnivores. Les carnivores chassent les herbivores, mais ne peuvent pas passé sur des plantes.
+	
+	\subsection{Fonctionnalités réalisées}
+	
+	\textbf{Placement des être vivants}\\
+	Pour commencer, il fallait tout d'abord pouvoir placer des être-vivants n'importe où sur l'espace de simulation. En sélectionnant avec les flèches gauche et droite, puis en cliquant, il est possible de pauser un êtres-vivants.
+	
+	\textbf{Croissement des plantes}\\
+	Ensuite, les plantes devaient être capable de grandir toute seul. Alors, quand elle le peuvent, elle choissisent un espace autour d'elle qui est libre, est fait apparaitre une copie d'elle même a cette endroit.
+	
+	\textbf{Mouvement des animaux}\\
+	Après, il fallait que les animaux puissent se déplacer. Alors, le programme leurs désigne un endroit cible, et ils s'y rendent.
+	
+	\textbf{Morts des êtres vivants}\\
+	Il fallait que les animaux puissent mourrir, alors, le programme leur donne un nombre, symbolisant leur vie, et quand celle-ci est à 0, ils sont supprimer. Il est possible pour les herbivores et les carnivores d'augmenter leur vie en mangeant ce qu'ils peuvent(des plantes pour les herbivores et des herbivores pour les carnivores).
+	
+	\section{Conception}
+	\subsection{Architecture générale}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{includes/img/architecture1}
+	\end{figure}
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{includes/img/architecture2}
+	\end{figure}
+	
+
+	\subsection{Classes principales}
+	%	Pour modifier le format pour TOUS les lstinput suivant, on peut utiliser \lstset{style=XXX}
+	%	ou le définir pour chaque lstinputlisting individuellement
+	\lstset{style=csharp}	
+
+	\textbf{PixelGeneric}\\
+	PixelGeneric est une classe permettant d'optimiser l'affichage de blocks de pixel à l'écran.
+	\lstinputlisting[caption=PixelGeneric.cs]{../Simulation/Simulation_etre_vivant/Class/PixelGeneric.cs}
+
+	\textbf{LivingBeing}\\
+	LivingBeing est une classe permettant de gérer les comportements des différents être-vivants.
+	\lstinputlisting[caption=LivingBeing.cs]{../Simulation/Simulation_etre_vivant/Class/Entite/LivingBeing.cs}
+	
+	
+	\textbf{PrimitiveRenderer}\\
+	PrimitiveRenderer est une classe permettant de déssiner différentes formes.
+	\lstinputlisting[caption=PrimitiveRenderer.cs]{../Simulation/Simulation_etre_vivant/Class/Renderer/PrimitiveRenderer.cs}
+	
+	
+	\subsection{Mécanismes importants}
+	\textbf{UpdatePlants}\\
+	La méthode UpdatePlants gère la propagation des plantes dans la simulation. Pour chaque plante, elle diminue son chronomètre (Timer) en fonction du temps écoulé. Lorsque celui-ci atteint zéro, la plante tente de se reproduire en choisissant une case voisine aléatoire.
+	
+	Si la case choisie est libre et se trouve dans les limites de la fenêtre, une nouvelle plante est créée à cet emplacement grâce à la méthode Clone. Elle est ensuite ajoutée à la grille et à la liste des êtres vivants qui seront intégrés à la simulation.
+	\begin{lstlisting}[style=csharp]
+		private void UpdatePlants(List<Plant> plants, float deltatime)
+		{
+			foreach (Plant plant in plants)
+			{
+				plant.Timer -= deltatime;
+				if (plant.Timer > 0f) continue;
+				plant.Timer = plant.TimeBeforeAction;
+				
+				Point from = ToCell(plant.Pixel.Position);
+				Point newCell = new Point(from.X + _rnd.Next(-1, 2), from.Y + _rnd.Next(-1, 2));
+				
+				if (newCell != from && InBounds(newCell) && IsFree(newCell))
+				{
+					Vector2 newSnapped = CellToPosition(newCell);
+					LivingBeing child = plant.Clone(newSnapped);
+					grid[newCell] = child;
+					beingToExist.Add(child);
+				}
+			}
+		}
+	\end{lstlisting}
+	
+	\textbf{UpdateAnimal}\\
+	La méthode UpdateAnimal gère le comportement des animaux dans la simulation. À chaque action, elle vérifie d'abord si l'animal est vivant et si son délai d'action (Timer) est écoulé.
+	
+	Ensuite, si l'animal possède un prédateur, elle vérifie si celui-ci se trouve à proximité. Si c'est le cas, l'animal tente de fuir en se déplaçant vers une case libre qui l'éloigne de la menace.
+	
+	Si aucun danger n'est détecté, l'animal cherche sa proie la plus proche et se déplace dans sa direction. Lorsqu'il rencontre une proie, il la mange et récupère ses points de vie. S'il rencontre un animal de la même espèce, il peut se reproduire si les conditions sont réunies. Enfin, si son déplacement est bloqué, il tente de contourner l'obstacle en se déplaçant vers une case voisine libre.	
+	\begin{lstlisting}[style=csharp]
+		private void UpdateAnimal(Animal animal, Animal template, Func<LivingBeing, bool> isPrey, float deltatime, Func<LivingBeing, bool> isThreat = null)
+		{
+			if (animal.Life <= 0)
+			{
+				return;
+			}
+			
+			animal.Timer -= deltatime;
+			if (animal.Timer > 0f)
+			{
+				return;
+			}
+			animal.Timer = animal.TimeBeforeAction;
+			
+			Point from = ToCell(animal.Pixel.Position);
+			
+			if (isThreat != null)
+			{
+				LivingBeing threat = FindNearest(animal, isThreat);
+				if (threat != null && Distance(from, ToCell(threat.Pixel.Position)) <= FleeRadius)
+				{
+					if (TryFleeStep(from, ToCell(threat.Pixel.Position), out Point fleeCell))
+					{
+						MoveAnimal(animal, from, fleeCell);
+						return;
+					}
+				}
+			}
+			
+			LivingBeing prey = FindNearest(animal, isPrey);
+			
+			Point next;
+			if (prey == null)
+			{
+				next = new Point(from.X + _rnd.Next(-1, 2), from.Y + _rnd.Next(-1, 2));
+			}
+			else
+			{
+				Point target = ToCell(prey.Pixel.Position);
+				next = new Point(from.X + Math.Sign(target.X - from.X),
+				from.Y + Math.Sign(target.Y - from.Y));
+			}
+			
+			if (next == from || !InBounds(next))
+			{
+				return;
+			}
+			
+			if (grid.TryGetValue(next, out LivingBeing occupant) && occupant != null)
+			{
+				if (isPrey(occupant))
+				{
+					animal.Life += occupant.Life;
+					RemoveBeing(occupant);
+					MoveAnimal(animal, from, next);
+				}
+				else if (occupant.GetType() == animal.GetType() && animal.NbChild < animal.NbMaxChild)
+				{
+					if (TryFindFreeNeighbor(from, out Point childCell))
+					{
+						animal.NbChild++;
+						LivingBeing child = template.Clone(CellToPosition(childCell));
+						grid[childCell] = child;
+						beingToExist.Add(child);
+					}
+				}
+				else if (TryFindFreeNeighbor(from, out Point sidestep))
+				{
+					MoveAnimal(animal, from, sidestep);
+				}
+			}
+			else
+			{
+				MoveAnimal(animal, from, next);
+			}
+		}
+		
+	\end{lstlisting}
+	
+
+
+
+	\section{Mécanismes importants}
+	\listoffigures
+
+	\lstlistoflistings
+
+\end{document}

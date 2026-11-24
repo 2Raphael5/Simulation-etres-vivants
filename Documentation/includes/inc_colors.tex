@@ -1,0 +1,107 @@
+%======================================================================
+% includes/inc_colors.tex
+% Palette de couleurs centralisée pour tous les includes
+%======================================================================
+
+\usepackage{xcolor}
+
+%----------------------------------------------------------------------
+% Couleur de texte "atténué" (muted)
+%----------------------------------------------------------------------
+\definecolor{mutedColor}{gray}{0.45} % texte secondaire (pied de page, légendes…)
+
+%----------------------------------------------------------------------
+% Gris / neutres de base
+%----------------------------------------------------------------------
+\definecolor{cfptBlack}{rgb}{0.00,0.00,0.00}
+\definecolor{cfptDarkGray}{gray}{0.25}
+\definecolor{cfptGray}{gray}{0.50}
+\definecolor{cfptLightGray}{gray}{0.90}
+\definecolor{cfptVeryLightGray}{gray}{0.98}
+
+% Alias "historiques" pour compatibilité
+\colorlet{lightgray}{cfptVeryLightGray}
+\colorlet{gray}{cfptGray}
+
+%======================================================================
+% Palette pour les listings de code
+%======================================================================
+
+% Fond des blocs de code
+\colorlet{codeBackground}{cfptVeryLightGray}
+
+% Couleurs sémantiques pour la coloration syntaxique
+\definecolor{codeKeyword}{rgb}{0.00,0.00,0.80}    % bleu foncé
+\definecolor{codeIdentifier}{rgb}{0.00,0.60,0.00} % vert
+\definecolor{codeString}{rgb}{0.80,0.00,0.00}     % rouge
+\definecolor{codeComment}{rgb}{0.50,0.50,0.50}    % gris
+\definecolor{codeAccent}{rgb}{0.58,0.00,0.82}     % violet (true/false/null)
+\definecolor{codeOperator}{rgb}{0.90,0.45,0.00}   % orange (opérateurs, ponctuation)
+\definecolor{codeType}{rgb}{0.20,0.60,0.60}       % cyan pour types/classes
+
+% Alias "historiques" pour compatibilité avec les anciens includes
+\colorlet{dkblue}{codeKeyword}
+\colorlet{dkgreen}{codeIdentifier}
+\colorlet{red}{codeString}
+\colorlet{purple}{codeAccent}
+\colorlet{orange}{codeOperator}   % !!! réservé à la coloration de code
+\colorlet{class}{codeType}
+\colorlet{darkgreen}{codeIdentifier}
+\colorlet{darkred}{codeString}
+
+%======================================================================
+% Palette pour les boîtes (info / success / warning / danger / etc.)
+%  -> Inspirée de Bootstrap (blue / green / amber / red) avec fonds doux.
+%======================================================================
+
+% Couleurs pour la boîte par défaut
+\definecolor{defaultBackground}{RGB}{245,245,245} 		% gris très clair
+\colorlet{defaultColor}{gray}                     		% bordure grise
+\colorlet{defaultTitleBackground}{gray!15}        		% fond du titre légèrement grisé
+
+% INFO  : messages neutres / informatifs
+\definecolor{infoColor}{rgb}{0.00,0.45,0.80}            % bleu
+\definecolor{infoBackground}{rgb}{0.91,0.96,1.00}       % bleu très clair
+\definecolor{infoTitleBackground}{rgb}{0.00,0.45,0.80}  % bandeau titre
+
+% SUCCESS : succès, validation, confirmation
+\definecolor{successColor}{rgb}{0.17,0.63,0.34}               % vert
+\definecolor{successBackground}{rgb}{0.91,0.98,0.92}          % vert très clair
+\definecolor{successTitleBackground}{rgb}{0.17,0.63,0.34}
+
+% WARNING : avertissement, point de vigilance
+\definecolor{warningColor}{rgb}{0.98,0.76,0.18}               % jaune / amber
+\definecolor{warningBackground}{rgb}{1.00,0.97,0.88}          % jaune très clair
+\definecolor{warningTitleBackground}{rgb}{0.98,0.76,0.18}
+
+% DANGER : erreur critique, interdiction
+\definecolor{dangerColor}{rgb}{0.83,0.25,0.25}                % rouge
+\definecolor{dangerBackground}{rgb}{1.00,0.93,0.94}           % rouge très clair
+\definecolor{dangerTitleBackground}{rgb}{0.83,0.25,0.25}
+
+% TEACHER : notes internes formateur
+\definecolor{teacherColor}{rgb}{0.55,0.27,0.07}         	% brun soutenu
+\definecolor{teacherBackground}{rgb}{0.98,0.95,0.90}    	% beige très clair
+\definecolor{teacherTitleBackground}{rgb}{0.55,0.27,0.07}
+
+% DOWNLOAD : encadrés de téléchargement / ressources
+\definecolor{downloadColor}{rgb}{0.00,0.40,0.80}              % bleu soutenu
+\definecolor{downloadBackground}{rgb}{0.92,0.96,1.00}         % bleu clair
+\definecolor{downloadTitleBackground}{rgb}{0.00,0.40,0.80}
+
+% AIDE : indices, coups de pouce
+\definecolor{aideColor}{rgb}{0.40,0.23,0.72}                  % indigo / violet
+\definecolor{aideBackground}{rgb}{0.95,0.93,1.00}             % indigo très clair
+\definecolor{aideTitleBackground}{rgb}{0.40,0.23,0.72}
+
+% OBJECTIF : objectifs pédagogiques, buts de séance
+\definecolor{objectifColor}{rgb}{1.00,0.58,0.00}              % orange franc
+\definecolor{objectifBackground}{rgb}{1.00,0.95,0.90}         % orange très clair
+\definecolor{objectifTitleBackground}{rgb}{1.00,0.58,0.00}
+
+% VALIDATION : critères de validation, checklist finale
+\definecolor{validationColor}{rgb}{0.00,0.58,0.51}            % vert/bleu (teal)
+\definecolor{validationBackground}{rgb}{0.90,0.97,0.96}       % teal très clair
+\definecolor{validationTitleBackground}{rgb}{0.00,0.58,0.51}
+
+% (Pas d’alias ici sur 'orange' ou 'cyan' pour éviter de casser les listings)

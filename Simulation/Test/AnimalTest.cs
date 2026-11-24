@@ -30,7 +30,7 @@ namespace Test
             Animal animal = new Animal("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10, 10, 0, 2);
             
             //ACT
-            animal.Update(0f);
+            animal.Update();
 
             //ASSERT
             Assert.AreEqual(9, animal.Life);

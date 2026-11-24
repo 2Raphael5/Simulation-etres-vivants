@@ -1,0 +1,96 @@
+%======================================================================
+% _titlepage.tex
+% Page de garde unifiée (support / examen) paramétrée par \DocSetup
+%======================================================================
+
+\definecolor{titleGrey}{rgb}{0.95,0.95,0.95} % Couleur de la box entourant le titre
+
+\begin{titlepage} % Pas de numérotation sur la page de garde
+
+	%--------------------------------------------------------------------
+	% Logo spécifique du document (en haut à droite) : \DocLogo
+	% (n'est affiché que si \DocLogo n'est pas vide)
+	%--------------------------------------------------------------------
+	\makeatletter
+	\ifx\DocLogo\@empty
+	% \DocLogo vide -> ne rien afficher
+	\else
+	\hfill\includegraphics[height=2cm]{\DocLogo}%
+	\fi
+	\makeatother
+
+	%--------------------------------------------------------------------
+	% Box de titre (grisée)
+	%--------------------------------------------------------------------
+	\begin{tcolorbox}[
+		colback=titleGrey,
+		colframe=titleGrey,
+		boxrule=0pt,
+		enhanced,
+		sharp corners,
+		width=\textwidth,
+		left=0.025\textwidth,
+		right=0.025\textwidth,
+		top=0.7cm,
+		bottom=0.7cm,
+		]
+		\raggedleft
+		\fontsize{30pt}{50pt}\selectfont
+		\textbf{\DocTitle}\\
+		\fontsize{15pt}{40pt}\selectfont
+		\textit{\DocSubtitle}
+	\end{tcolorbox}
+
+	%--------------------------------------------------------------------
+	% Pastille "domaine" sous le titre (optionnelle)
+	%   - seulement si \DocDomaine non vide
+	%   - largeur ajustée au texte, alignée à droite
+	%--------------------------------------------------------------------
+	\makeatletter
+	\ifstrempty{\DocDomaine}{%
+		% Domaine vide -> ne rien afficher
+	}{%
+		\vspace{-23pt}% ajuste la superposition avec la box grise
+		\noindent\hfill
+		\tcbox[
+		enhanced,
+		colback=black,
+		colframe=black,
+		boxrule=0pt,
+		sharp corners,
+		drop shadow,
+		left=8pt,
+		right=8pt,
+		top=5pt,
+		bottom=5pt,
+		boxsep=0pt
+		]%
+		{%
+			{\bfseries\normalsize\textcolor{white}{\DocDomaine}}%
+		}%
+	}%
+	\makeatother
+
+	\vfill
+
+	%--------------------------------------------------------------------
+	% Bloc bas de page : logo CFPT + infos auteur / contact + année
+	%--------------------------------------------------------------------
+	\begin{minipage}{0.25\textwidth}
+		\iftitlepagelogo
+		\includegraphics[width=5cm]{CFPT-I-L}
+		\fi
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.75\textwidth}
+		\parbox[t]{0.93\textwidth}{%
+			\raggedleft
+			\includegraphics[width=3cm]{cfpt_informatique}\\[-3pt]
+			%			{\small \textbf{CFPT Ecole informatique}}\\[2pt]
+			{\footnotesize\texttt{\DocEmail}}\\[-3pt]
+			\hfill\rule{0.30\linewidth}{2pt}\\
+			{\footnotesize\textit{\DocYear}}
+		}%
+	\end{minipage}
+
+\end{titlepage}

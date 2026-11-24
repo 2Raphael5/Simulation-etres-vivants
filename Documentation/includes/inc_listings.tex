@@ -1,0 +1,654 @@
+%======================================================================
+% includes/inc_listings.tex
+% Configuration centralisée pour tous les listings de code
+%
+% DÉPENDANCES :
+%   - nécessite que les couleurs soient définies dans includes/inc_colors.tex
+%     (par exemple : dkblue, dkgreen, darkred, class, gray, lightgray, etc.)
+%
+% CHARGEMENT TYPE DANS LE DOCUMENT :
+%   \input{includes/inc_colors}
+%   \input{includes/inc_listings}
+%
+% USAGE GÉNÉRAL :
+%   - Style par défaut neutre :
+%       \begin{lstlisting}
+%       ...
+%       \end{lstlisting}
+%
+%   - C# (style csharp) :
+%       \begin{lstlisting}[style=csharp]
+%       ...
+%       \end{lstlisting}
+%
+%   - PHP (style php) :
+%       \begin{lstlisting}[style=php]
+%       ...
+%       \end{lstlisting}
+%
+%   - JavaScript (style javascript) :
+%       \begin{lstlisting}[style=javascript]
+%       ...
+%       \end{lstlisting}
+%
+%   - SQL / MySQL (style sql) :
+%       \begin{lstlisting}[style=sql]
+%       ...
+%       \end{lstlisting}
+%
+%   - Bash (style bashsimple) :
+%       \begin{lstlisting}[style=bashsimple]
+%       ...
+%   \end{lstlisting}
+%
+%   - Pseudo-code (style pseudocode) :
+%       \begin{lstlisting}[style=pseudocode]
+%       ...
+%   \end{lstlisting}
+%
+%   - Listing protégé contre le copier/coller :
+%       \begin{lstlistingnocopy}{Texte-remplacant-dans-le-presse-papiers}{CSharp}
+%       ...
+%   \end{lstlistingnocopy}
+%
+%======================================================================
+
+%----------------------------------------------------------------------
+% Tentative de chargement automatique de inc_colors si nécessaire
+% On teste une couleur définie dans inc_colors (par ex. dkblue).
+%----------------------------------------------------------------------
+\makeatletter
+\@ifundefined{color@dkblue}{%
+	% dkblue non défini -> on suppose que inc_colors n'a pas encore été chargé
+	\InputIfFileExists{includes/inc_colors.tex}{}{%
+		% Si le fichier n'existe pas, on ne fait rien (fallback silencieux)
+	}%
+}{}%
+\makeatother
+
+%----------------------------------------------------------------------
+% Packages nécessaires
+%----------------------------------------------------------------------
+\usepackage{listings}
+\usepackage{listingsutf8} % charge listings + support UTF-8
+\usepackage{accsupp}      % pour masquer le texte lors du copy/paste (lstlistingnocopy)
+
+%======================================================================
+% PARTIE 1 : Configuration commune
+%======================================================================
+
+% Numéros de ligne non copiables (pour certains styles, ex. C#)
+\newcommand{\noncopynumber}[1]{%
+	\BeginAccSupp{method=escape,ActualText={}}%
+	{\scriptsize #1}%
+	\EndAccSupp{}%
+}
+
+% Réglages globaux pour tous les listings
+\lstset{
+	basicstyle       = \footnotesize\ttfamily,
+	columns          = fullflexible,
+	keepspaces       = true,
+	showstringspaces = false,
+	upquote          = true,
+	breaklines       = true,
+	breakatwhitespace= true,
+	tabsize          = 2,
+	frame            = single,
+	captionpos       = b,
+	inputencoding    = utf8,
+	extendedchars    = true,
+	% Cartographie commune (accents FR + ponctuation typographique)
+	literate         =
+		{á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+		{Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ä}{{\"A}}1
+		{é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+		{É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1
+		{í}{{\'i}}1 {ì}{{\`i}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+		{Í}{{\'I}}1 {Ì}{{\`I}}1 {Î}{{\^I}}1 {Ï}{{\"I}}1
+		{ó}{{\'o}}1 {ò}{{\`o}}1 {ô}{{\^o}}1 {ö}{{\"o}}1
+		{Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ô}{{\^O}}1 {Ö}{{\"O}}1
+		{ú}{{\'u}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
+		{Ú}{{\'U}}1 {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1
+		{ç}{{\c{c}}}1 {Ç}{{\c{C}}}1
+		{œ}{{\oe}}1 {Œ}{{\OE}}1
+		{æ}{{\ae}}1 {Æ}{{\AE}}1
+		{’}{{'}}1 {‘}{{`}}1
+		{“}{{``}}1 {”}{{''}}1
+		{–}{{--}}1 {—}{{---}}1
+		{…}{{\ldots}}1
+	,
+	backgroundcolor  = \color{lightgray},
+	rulesepcolor     = \color{gray},
+	prebreak         = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	% Inclusion partielle via rangeprefix/rangesuffix
+	rangeprefix        = {//`:~},
+	rangesuffix        = {~:`},
+	includerangemarker = false,
+}
+
+% Style par défaut neutre
+\lstdefinestyle{defaultcode}{
+	keywordstyle    = \color{dkblue}\bfseries,
+	identifierstyle = \color{dkgreen},
+	stringstyle     = \color{red},
+	commentstyle    = \color{gray}\itshape,
+}
+
+\lstset{style=defaultcode}
+
+%======================================================================
+% PARTIE 2 : C# (CSharp)
+%======================================================================
+
+% Langage C# basé sur [Sharp]C
+\lstdefinelanguage{CSharp}{
+	language      = [Sharp]C,
+	morekeywords  = {
+		if, for, while, do, var, get, set,
+		string, value, String, ToString, ToInt32, ToBool, toInt
+	},
+	otherkeywords = {
+		\#region, \#endregion, \#define, \#if, \#endif, \#else
+	},
+}
+
+% Style CSharp complet
+\lstdefinestyle{csharp}{
+	language        = CSharp,
+	numbers         = left,
+	numberstyle     = \noncopynumber,
+	stepnumber      = 5,
+	numbersep       = 5pt,
+	frame           = shadowbox,
+	keywordstyle    = \color{dkblue}\bfseries,
+	commentstyle    = \color{darkgreen},
+	stringstyle     = \color{darkred},
+	identifierstyle = \color{black},
+	% Classes/types mis en avant
+	emph            = [1]{
+		Application,
+		Char, Color, Console, Convert,
+		DialogResult,
+		Environment, EventArgs,
+		Form,
+		Object, String,
+		SByte, Int16, Int32, Int64,
+		Byte, UInt16, UInt32, UInt64,
+		Single, Double,
+		Keys, KeyPressEventArgs,
+		MessageBox, MessageBoxButtons,
+		% --- MSTest : classes / attributs importants ---
+		Assert,
+		TestContext,
+		TestClass, TestMethod,
+		TestInitialize, TestCleanup,
+		ClassInitialize, ClassCleanup,
+		DataTestMethod, DataRow,
+		ExpectedException,
+		TestCategory, Owner, Priority, TestProperty,
+		% --- MonoGame / XNA : classes / structs / enums importants ---
+		Game, GameTime, GameComponent, DrawableGameComponent,
+		GraphicsDevice, GraphicsDeviceManager, GraphicsProfile,
+		Viewport, DisplayMode, PresentationParameters,
+		ContentManager, ContentReader, ContentWriter,
+		SpriteBatch, SpriteFont, SpriteEffects, SpriteSortMode,
+		Texture, Texture2D, Texture3D, RenderTarget2D, RenderTargetCube,
+		SurfaceFormat, RenderTargetUsage,
+		Effect, BasicEffect, AlphaTestEffect,
+		BlendState, SamplerState, DepthStencilState, RasterizerState,
+		Color, Rectangle, Point,
+		Vector2, Vector3, Vector4, Matrix, Quaternion, Plane, Ray,
+		MathHelper, Curve, BoundingBox, BoundingSphere, BoundingFrustum,
+		GameServiceContainer,
+		% --- Input ---
+		Keyboard, KeyboardState,
+		Mouse, MouseState,
+		GamePad, GamePadState, GamePadCapabilities,
+		Keys, Buttons, ButtonState, PlayerIndex,
+		TouchPanel, TouchCollection, TouchLocation, GestureSample, GestureType,
+		% --- Audio / Media ---
+		SoundEffect, SoundEffectInstance, SoundState,
+		Song, MediaPlayer,
+		% --- Timing / misc ---
+		TimeSpan,
+		% --- Common graphics helpers (si tu utilises les primitives) ---
+		VertexDeclaration,
+		VertexBuffer, IndexBuffer, DynamicVertexBuffer,
+		VertexPositionColor, VertexPositionTexture, VertexPositionColorTexture,
+		PrimitiveType, BufferUsage, IndexElementSize
+	},
+	emphstyle       = [1]\color{class},
+}
+
+
+%======================================================================
+% PARTIE 3 : PHP
+%======================================================================
+
+% Charger la définition standard de PHP
+\lstloadlanguages{PHP}
+
+% Sous-langage PHP "CFPT" : on ajoute nos mots-clés / types
+\lstdefinelanguage[CFPT]{PHP}[]{PHP}{%
+	% Mots-clés supplémentaires
+	morekeywords={declare},
+	% Types scalaires / retour qu'on veut colorer comme "types"
+	morekeywords=[2]{%
+		int, float, string, bool, boolean, void,
+		array, iterable, object, mixed, never
+	},
+}
+
+\lstdefinestyle{php}{%
+	language        = [CFPT]PHP,
+	% groupe 1 : mots-clés PHP
+	keywordstyle    = \color{dkblue}\bfseries,
+	% groupe 2 : types
+	keywordstyle    = [2]\color{class}\bfseries,
+	identifierstyle = \color{dkgreen},
+	stringstyle     = \color{red},
+	commentstyle    = \color{gray}\itshape,
+	emph            = {true, false, null},
+	emphstyle       = \color{purple},
+	morekeywords    = {
+		namespace, use, class, extends,
+		public, private, protected, function,
+		return, as, new, static, global, var,
+		if, else, elseif, while, for, foreach, do,
+		switch, case, break, continue, default,
+		echo, print, die, exit, instanceof,
+		try, catch, finally, throw, implements
+	},
+	% Délimiteurs spéciaux @@...@@ (par ex. pour marquer du code important)
+	moredelim       = **[is][\color{orange}]{@@}{@@},
+}
+
+%======================================================================
+% PARTIE 4 : JavaScript
+%======================================================================
+
+% Définition du langage JavaScript pour listings
+\lstdefinelanguage{JavaScript}{
+	sensitive        = true,
+	% Mots-clés principaux JavaScript
+	morekeywords = {
+		break, case, catch, continue, debugger, default, delete, do, else, finally,
+		for, function, if, in, instanceof, new, return, switch, this, throw, try,
+		typeof, var, void, while, with,
+		const, let,
+		class, extends, super, constructor,
+		import, export, from, as,
+		get, set,
+		async, await, yield
+	},
+	% Types / "mots-clés" de type (pratique si tu montres un peu de TS ou JSDoc)
+	morekeywords = [2]{
+		number, string, boolean, any, void, unknown, never, object, Promise
+	},
+	% Mots-clés / fonctions spécifiques à Jest (groupe 3)
+	morekeywords = [3]{
+		describe, it, test,
+		expect,
+		beforeEach, afterEach,
+		beforeAll, afterAll,
+		jest
+	},
+	% Commentaires
+	morecomment = [l]{//},
+	morecomment = [s]{/*}{*/},
+	% Chaînes
+	morestring  = [b]',
+	morestring  = [b]"
+}
+
+% Style JavaScript (couleurs cohérentes avec le reste)
+\lstdefinestyle{javascript}{%
+	language        = JavaScript,
+	basicstyle      = \footnotesize\ttfamily,
+	% groupe 1 : mots-clés JS
+	keywordstyle    = \color{dkblue}\bfseries,
+	% groupe 2 : types / notions proches TypeScript
+	keywordstyle    = [2]\color{class}\bfseries,
+	% groupe 3 : Jest (API de tests)
+	keywordstyle    = [3]\color{darkred}\bfseries,
+	identifierstyle = \color{dkgreen},
+	stringstyle     = \color{red},
+	commentstyle    = \color{gray}\itshape,
+	emph            = {true, false, null, undefined},
+	emphstyle       = \color{purple},
+}
+
+%======================================================================
+% PARTIE 5 : SQL / MySQL
+%======================================================================
+
+\lstdefinelanguage{mysql}{
+	morekeywords = {
+		% --- requêtes de base ---
+		SELECT, FROM, WHERE, INSERT, INTO, VALUES, UPDATE, DELETE,
+		CREATE, TABLE, PRIMARY, KEY, AUTO_INCREMENT,
+		ALTER, DROP, DATABASE, USE,
+		INNER, LEFT, RIGHT, JOIN, ON, AS,
+		AND, OR, NOT, NULL, IS, IN, LIKE, BETWEEN,
+		ORDER, BY, GROUP, HAVING, DISTINCT, LIMIT, OFFSET,
+		FOR,
+		% --- transactions / verrous ---
+		BEGIN, START, TRANSACTION, COMMIT, ROLLBACK,
+		SAVEPOINT, RELEASE, WORK, CHAIN,
+		LOCK, UNLOCK,
+		% --- niveaux d'isolation / modes d'accès ---
+		ISOLATION, LEVEL,
+		READ, WRITE, ONLY,
+		REPEATABLE, UNCOMMITTED, COMMITTED, SERIALIZABLE,
+		AUTOCOMMIT,
+		% --- XA transactions ---
+		XA, END, PREPARE, RECOVER,
+		% --- types ---
+		INT, INTEGER, DECIMAL, NUMERIC, FLOAT, DOUBLE,
+		CHAR, VARCHAR, TEXT, DATE, DATETIME, TIMESTAMP, TIME,
+		% --- contraintes / index ---
+		ENGINE, DEFAULT, UNIQUE, INDEX, FOREIGN, REFERENCES,
+		% --- gestion des comptes / privilèges ---
+		GRANT, REVOKE, ALL, PRIVILEGES,
+		USER, ROLE, PASSWORD,
+		IDENTIFIED, BY,
+		FLUSH, WITH, OPTION, PROXY,
+		% --- vues ---
+		VIEW, VIEWS,
+		% --- procédures / fonctions / triggers / events ---
+		PROCEDURE, FUNCTION, TRIGGER, EVENT, ROUTINE,
+		INOUT, RETURNS, DETERMINISTIC,
+		SQL, SECURITY, DEFINER, INVOKER,
+		SET
+	},
+	sensitive   = false, % mots-clés insensibles à la casse
+}
+
+\lstdefinestyle{sql}{
+	language        = mysql,
+	keywordstyle    = \color{dkblue}\bfseries,
+	identifierstyle = \color{dkgreen},
+	stringstyle     = \color{red},
+	commentstyle    = \color{gray}\itshape,
+}
+
+%======================================================================
+% PARTIE 6 : Bash / PowerShell (style commun)
+%======================================================================
+
+\lstdefinestyle{bashsimple}{
+	language        = bash,
+	basicstyle      = \footnotesize\ttfamily,
+	frame           = single,
+	framesep        = 2pt,
+	breaklines      = true,
+	showstringspaces= false,
+	columns         = fullflexible,
+	keepspaces      = true,
+	upquote         = true,
+	tabsize         = 2,
+	keywordstyle    = \color{dkblue}\bfseries,
+	identifierstyle = \color{black},
+	stringstyle     = \color{red},
+	commentstyle    = \color{gray}\itshape,
+	% IMPORTANT : le tiret fait partie des "lettres"
+	alsoletter      = {-},
+	% force en noir litéralement
+	% IMPORTANT : on conserve la cartographie FR + on ajoute les règles spécifiques
+	literate=
+		{á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+		{Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ä}{{\"A}}1
+		{é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+		{É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1
+		{í}{{\'i}}1 {ì}{{\`i}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+		{Í}{{\'I}}1 {Ì}{{\`I}}1 {Î}{{\^I}}1 {Ï}{{\"I}}1
+		{ó}{{\'o}}1 {ò}{{\`o}}1 {ô}{{\^o}}1 {ö}{{\"o}}1
+		{Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ô}{{\^O}}1 {Ö}{{\"O}}1
+		{ú}{{\'u}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
+		{Ú}{{\'U}}1 {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1
+		{ç}{{\c{c}}}1 {Ç}{{\c{C}}}1
+		{/php/}{{{\color{black}/php/}}}4%
+		{/php*}{{{\color{black}/php/}}}4%
+		{php.ini}{{{\color{black}php.ini}}}6%
+		{.php}{{{\color{black}.php}}}4%
+		{wsl.}{{{\color{black}wsl.}}}4
+	,
+	%--------------------------------------------------------------
+	% Commandes bash / sh + cmdlets PowerShell mises en évidence
+	% (j'ai retiré 'tar' pour éviter de colorer les extensions .tar)
+	%--------------------------------------------------------------
+	morekeywords={
+		% --- Bash / sh de base ---
+		clear,
+		cd, ls, cp, mv, rm, mkdir, rmdir, touch,
+		chmod, chown, chgrp, umask, usermod,
+		sudo, su, passwd,
+		apt, apt-get, apt-cache, add-apt-repository,
+		a2enmod, a2dismod, a2encond, a2dismod, a2enconf, a2disconf,
+		service, systemctl,
+		kill, killall, ps, top, htop,
+		cat, tac, less, more, head, tail,
+		grep, egrep, fgrep, find, xargs,
+		echo, printf,
+		nano, vi, vim, code,
+		ssh, scp, sftp, rsync,
+		service,
+		zip, unzip, gzip, gunzip,
+		df, du, mount, umount,
+		uname, hostname, whoami, id, pwd,
+		ln,
+		php, php8.4,
+		mysql, mariadb, mariadb_secure_installation, mysql_secure_installation,
+		update-alternatives,
+		composer,
+		wsl,
+		% --- Cmdlets PowerShell fréquents ---
+		Get-Help, Get-Command,
+		Get-ChildItem, Get-Item, Set-Item, Remove-Item,
+		Copy-Item, Move-Item, New-Item, Test-Path,
+		Get-Location, Set-Location, Push-Location, Pop-Location,
+		Get-Content, Set-Content, Add-Content,
+		Get-Process, Stop-Process, Start-Process,
+		Get-Service, Start-Service, Stop-Service, Restart-Service,
+		Get-Module, Import-Module, Install-Module,
+		Invoke-WebRequest, Invoke-Expression,
+		Get-History, Clear-History,
+		Get-Alias, Set-Alias,
+		Get-ExecutionPolicy, Set-ExecutionPolicy,
+		Get-EventLog, Write-EventLog
+	},
+	%--------------------------------------------------------------
+	% Options / paramètres mis en avant (bash + PowerShell)
+	%--------------------------------------------------------------
+	emph={
+		% options bash/génériques
+		-d,
+		-s, status,
+		-c,--config,
+		-h,--help,
+		-v,--version,
+		-y,--yes,
+		-r,-R,
+		-a,--all,
+		-l,--list,
+		-f,--force,
+		--update,
+		-i,--ini,
+		--install,install,
+		--export, --terminate,
+		--import,
+		-name,
+		restart,
+		--unregister,
+		--set-default,
+		--list,
+		--verbose,
+		-G,
+		-u, --user,
+		-p, --password,
+		update, full-upgrade,
+		% options courantes PowerShell
+		-Path,
+		-Recurse,
+		-Filter,
+		-Include,
+		-Exclude,
+		-Force,
+		-Name,
+		-ErrorAction,
+		-WhatIf,
+		-Confirm,
+		-File,
+		-Directory,
+		-Value,
+		-Destination,
+		-Source,
+		-Credential
+	},
+	emphstyle=\color{purple}\bfseries,
+}
+
+%======================================================================
+% Style listings : Pseudo-code (Flowgorithm / ATALGO)
+%======================================================================
+
+\lstdefinestyle{pseudocode}{
+	language        = {},
+	basicstyle      = \footnotesize\ttfamily,
+	showstringspaces=false,
+	columns         = fullflexible,
+	keepspaces      = true,
+	upquote         = true,
+	% Commentaires (si tu en mets dans tes extraits)
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle    = \color{gray}\itshape,
+	% Chaînes
+	morestring=[b]",
+	stringstyle     = \color{darkred},
+	% -------------------------
+	% Groupe 1 : Structure / contrôle
+	% -------------------------
+	keywordstyle    = \color{dkblue}\bfseries,
+	morekeywords    = {
+		ALGORITHME, DEBUT_ALGORITHME, FIN_ALGORITHME,
+		Fonction, Principale, DEBUT, FIN, Fin,
+		SI, Si, ALORS, Alors, SINON, Sinon, Autre, DEBUT_SI, FIN_SI, DEBUT_SINON, FIN_SINON,
+		TANT_QUE, Tant, Que, DEBUT_TANT_QUE, FIN_TANT_QUE,
+		POUR, Pour, DEBUT_POUR, FIN_POUR, ALLANT_DE, PAR_PAS_DE, A, a,
+		FAIRE, Faire,
+		CAS, SUIVANT, DEBUT_SUIVANT, FIN_SUIVANT
+	},
+	% -------------------------
+	% Groupe 2 : I/O et actions “verbes” (couleur différente)
+	% -------------------------
+	classoffset=1,
+	keywordstyle=\color{darkgreen}\bfseries,
+	morekeywords={
+		AFFICHER, Afficher,
+		LIRE, Lire,
+		ATTENDRE, Attendre,
+		Saisie, SAISIE,
+		Appeler, APPELER,
+		Initialiser, INITIALISER
+	},
+	classoffset=0,
+	% -------------------------
+	% Groupe 3 : Déclarations / affectations (encore une autre couleur)
+	% -------------------------
+	classoffset=2,
+	keywordstyle=\color{dkblue}\bfseries,
+	morekeywords={
+		VARIABLES, Variables,
+		Déclarer, Declarer, DECLARER,
+		Variable,
+		Type, TYPE, de,
+		Assigner, ASSIGNER,
+		Expression, EXPRESSION,
+		Paramètre, Parametre, PARAMETRE,
+		Retour, RETOUR,
+		Retourner, Retourner, RETOURNER,
+		Retouner, RETOUNER, % (typo présent dans le PDF)
+		Prend, PREND, PREND_POUR_VALEUR
+	},
+	classoffset=0,
+	% -------------------------
+	% Types fréquents (mis en “emphase”)
+	% -------------------------
+	emph={Entier,Réel,Reel,Chaîne,Chaine,Booléen,Booleen,Tableau,Array},
+	emphstyle=\color{darkred}\bfseries,
+	% Fonctions usuelles vues dans tes pseudo-codes
+	emph={size,len,char,Random,True,False},
+	emphstyle=\color{darkgreen},
+	% Bonus : rendre quelques opérateurs plus “propres” (optionnel)
+	literate=
+		{á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+		{Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ä}{{\"A}}1
+		{é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+		{É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1
+		{í}{{\'i}}1 {ì}{{\`i}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+		{Í}{{\'I}}1 {Ì}{{\`I}}1 {Î}{{\^I}}1 {Ï}{{\"I}}1
+		{ó}{{\'o}}1 {ò}{{\`o}}1 {ô}{{\^o}}1 {ö}{{\"o}}1
+		{Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ô}{{\^O}}1 {Ö}{{\"O}}1
+		{ú}{{\'u}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
+		{Ú}{{\'U}}1 {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1
+		{ç}{{\c{c}}}1 {Ç}{{\c{C}}}1
+		{<=}{{\(\le\)}}1
+		{>=}{{\(\ge\)}}1
+		{!=}{{\(\neq\)}}1
+		{&&}{{\(\wedge\)}}1
+		{||}{{\(\vee\)}}1
+}
+
+%=========================================================
+% Langage LaTeX
+%=========================================================
+\lstdefinelanguage{latex}{
+	morekeywords={
+		documentclass,usepackage,input,include,includegraphics,
+		begin,end,section,subsection,subsubsection,
+		tableofcontents,listoffigures,lstlistoflistings,
+		caption,label,ref,vref,textbf,textit,emph,
+		DocSetup,newcommand,renewcommand,
+		graphicspath,DeclareGraphicsExtensions
+	},
+	sensitive=true,
+	morecomment=[l]{\%},
+	morestring=[b]",
+	alsoletter={\\}
+}
+
+%=========================================================
+% Style LaTeX
+%=========================================================
+\lstdefinestyle{latexdoc}{
+	language=latex,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue}\bfseries,
+	commentstyle=\color{gray},
+	stringstyle=\color{red},
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=8pt,
+	frame=single,
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=2
+}
+
+%======================================================================
+% PARTIE 8 : Environnement protégé (no copy/paste)
+%======================================================================
+
+\lstnewenvironment{lstlistingnocopy}[2]{%
+	% #1 : texte remplacé dans le presse-papiers
+	% #2 : langage ou style (ex. CSharp, php, mysql, ...)
+	\BeginAccSupp{method=escape,ActualText={#1}}%
+	\lstset{
+		language = #2,
+	}%
+}{%
+	\EndAccSupp{}%
+}

@@ -1,7 +1,6 @@
 ﻿using Class;
 using Class.Entite;
 using Microsoft.Xna.Framework;
-using Simulation_etre_vivant.Class.Entite;
 namespace Test
 {
     [TestClass]
@@ -11,7 +10,7 @@ namespace Test
         public void Clone_PixelPosition_NewPlantAddedToList()
         {
             //ARRANGE
-            PixelGeneric pixel = new PixelGeneric(new Vector2(0,0), Color.Blue);
+            PixelGeneric pixel = new PixelGeneric(new Vector2(0, 0), Color.Blue);
 
             List<LivingBeing> being = new List<LivingBeing>
             {
@@ -22,7 +21,7 @@ namespace Test
 
             //ASSERT
             Assert.AreEqual(2, being.Count);
-            Assert.IsTrue(being[being.Count -1 ] is Plant);
+            Assert.IsTrue(being[being.Count - 1] is Plant);
         }
     }
 }
