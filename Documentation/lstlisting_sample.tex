@@ -24,7 +24,7 @@
 	% INFORMATIONS SUR L'AUTEUR
 	%---------------------------------------------------------------------------------
 	author   = {Raphaël Ahimon},          % Nom de l'auteur du document
-	email    = {raphael.ahmn@edu.ge.ch},% Email de contact
+	email    = {raphael.ahmn@eduge.ch},% Email de contact
 	%---------------------------------------------------------------------------------
 	% TITRE DU DOCUMENT
 	%---------------------------------------------------------------------------------
@@ -118,7 +118,18 @@
 	\includegraphics[width=0.7\textwidth]{includes/img/architecture2}
 	\end{figure}
 	
-
+	\subsection{Explication des dossiers important}
+	
+	\textbf{Dossier Entite}\\
+	Ce dossier contient les fichiers de la classe LivingBeing et de toute les classes enfants ainsi que les enfants de ces enfants.
+	
+	\textbf{Dossier Input}\\
+	Ce dossier contient tous les fichiers des classes concernant l'utilisation du clavier et de la souris.
+	
+	
+	\textbf{Dossier Content}\\
+	Ce dossier contient tout ce qui doit être importer dans l'application.
+	
 	\subsection{Classes principales}
 	%	Pour modifier le format pour TOUS les lstinput suivant, on peut utiliser \lstset{style=XXX}
 	%	ou le définir pour chaque lstinputlisting individuellement
@@ -132,11 +143,9 @@
 	LivingBeing est une classe permettant de gérer les comportements des différents être-vivants.
 	\lstinputlisting[caption=LivingBeing.cs]{../Simulation/Simulation_etre_vivant/Class/Entite/LivingBeing.cs}
 	
-	
 	\textbf{PrimitiveRenderer}\\
 	PrimitiveRenderer est une classe permettant de déssiner différentes formes.
 	\lstinputlisting[caption=PrimitiveRenderer.cs]{../Simulation/Simulation_etre_vivant/Class/Renderer/PrimitiveRenderer.cs}
-	
 	
 	\subsection{Mécanismes importants}
 	\textbf{UpdatePlants}\\
@@ -252,10 +261,97 @@
 		
 	\end{lstlisting}
 	
-
-
-
-	\section{Mécanismes importants}
+	\section{Réalisation}
+	\subsection{Choix techniques}
+	\textbf{Visibilité de la souris}\\
+	Étant donné que l'application nécessite un placement précis des différents être vivants, li fallait un moyen, pour l'utilisateur, de pouvoir les placer facilement. C'est pourquoi, la visibilité de la souris à été activé. En utilisant la souris, l'utilisateur possède une plus grande facilité de placement et est beaucoup plus instinctif qu'utiliser un autre moyen de placement.
+	
+	\textbf{Redimensionnement de la fenêtre}\\
+	Vus que l'application doit être jouable sur n'importe quel ordinateur, et que les dimentions de la fenêtre qu'il utilise est inconnu, il fallait trouver un moyen de définir la taille de la fenêtre en fonction de l'utilisateur. En permettant à l'utilisateur de redéfinir la taille de la fenêtre, on est sûr que celui-ci, si il le souhaite, pourras utiliser l'application avec, presque, n'importe qu'elle écran.
+	
+	\subsection{Algorithmes particuliers}	
+	\textbf{État de la simulation}\\
+	Cette algorithme permet de choisir ce que le programme doit appliquer en fonction de l'état de la simulation. 
+	
+	Tout d'abord, input.Update(gameTime) récupère les actions effectuées par le joueur (touche du clavier).
+	
+	Ensuite, deltaTime récupère le temps écoulé depuis la dernière mise à jour en millisecondes. Si le joueur appuie sur la touche d'accélération, cette valeur est remplacée par le temps en microsecondes.
+	
+	Après, selon l'état actuel, le programme met à jour le menu principal (UpdateMainMenu()) ou la partie en cours (UpdatePlaying(deltaTime)).
+	
+	Puis, si le joueur appuie sur la touche de sortie, le jeu revient au menu principal.
+	
+	Enfin, base.Update(gameTime) appelle la méthode de mise à jour de la classe parente.
+	
+	Cette algorithme est également utilisé pour la méthode Draw() afin d'afficher différentes choses en fonction de l'état de l'application.
+	\begin{lstlisting}[style=csharp]
+		protected override void Update(GameTime gameTime)
+		{
+			_input.Update(gameTime);
+			float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+			if (_input.IsDown(InputAction.Accelerate))
+			{
+				deltaTime = (float)gameTime.ElapsedGameTime.TotalMicroseconds;
+			}
+			switch (GameStateManager.CurrentState)
+			{
+				case GameState.Menu:
+				UpdateMainMenu();
+				break;
+				case GameState.Playing:
+				UpdatePlaying(deltaTime);
+				break;
+			}
+			
+			if (_input.IsJustPressed(InputAction.Exit))
+			{
+				GameStateManager.ChangeState(GameState.Menu);
+			}
+			base.Update(gameTime);
+		}
+	\end{lstlisting}
+	
+	\subsection{Difficultés et solutions}	
+	Il n'y a eu aucun problème majeurs lors de la réalisation de ce projet.
+	
+	\section{Tests et validation}
+	Pour s'assurer que le programmes ne contenait pas d'érreur, il fallait le tester. Ce programme à été testé de 2 manière différentes:
+	\begin{itemize}
+		\item Les tests fonctionnels
+		\item Les tests unitaires
+	\end{itemize}
+	
+	\subsection{Test fonctionnels}
+	Les test suivants ont été réaliser, en partie, par des camarades de classe:
+		\begin{enumerate}
+		\item Positionnement des entités: Vérifier que les entités apparraissent bien à la case en dessous de la souris.
+		\item Apparition des entités en dehors de la fenêtre: Vérifier qu'aucune entité ne pouvaient pas apparaitre en dehors de la fenêtre du programme.
+		\item Déplacement des entités à l'intérieur de la fenêtre: Vérifier que les entités ne pouvaient pas sortir de la fenêtre.
+	\end{enumerate}
+	
+	\subsection{Test unitaires}
+	Les test suivants ont été réaliser en utilisant MSTest:
+	\begin{enumerate}
+		\item Clone des entités: Vérification que chaque entités, quand elles sont clonés, donne biens la même entités.
+		\item Mort des entités: Si la vie d'une entité atteind 0, sa propriété Pixel deviennent null.
+		\item Viellissement des animaux: Vérifier que chaque milliseconde, les animaux perdent 1 vie.
+	\end{enumerate}
+	
+	\section{Bilan technique}
+	\subsection{État final}	
+	Le projet fonctionne, toute les fonctionnalités prévus sont implémentés et elles ont été testé.
+	\subsection{Principales limites connues}
+	\begin{itemize}	
+		\item Les animaux se reproduisent bien trop vite.
+		\item Il est possibles qu'un nombre trop grands d'animaux.
+	\end{itemize}
+	\subsection{Améliorations pottentiel}
+	\begin{itemize}	
+		\item Plus grande variété d'être vivant.
+		\item Sauvegarde d'une simulation dans un fichier json
+	\end{itemize}
+	
+	
 	\listoffigures
 
 	\lstlistoflistings
