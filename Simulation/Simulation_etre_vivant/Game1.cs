@@ -31,8 +31,8 @@ namespace Simulation_etre_vivant
         MouseInputManager _mouseInputManager;
         MouseState currentMouseState;
 
-        List<LivingBeing> allLivingBeing;
-        List<LivingBeing> beingToExist;
+        List<Block> allLivingBeing;
+        List<Block> beingToExist;
 
         private const int CellSize = 10;
 
@@ -41,7 +41,7 @@ namespace Simulation_etre_vivant
         /// </summary>
         private const int FleeRadius = 6;
 
-        Dictionary<Point, LivingBeing> grid = new Dictionary<Point, LivingBeing>();
+        Dictionary<Point, Block> grid = new Dictionary<Point, Block>();
 
         private readonly Random _rnd = new Random();
 
@@ -49,11 +49,14 @@ namespace Simulation_etre_vivant
         Plant normalPlant;
         Herbivore normalHerbivore;
         Carnivore normalCarnivore;
+        Block normalRock;
 
-        List<LivingBeing> allSeletableBeing;
+       List<Block> allSeletableBeing;
         int indexBeing;
 
         private bool _wasMouseDown;
+
+        Hud _hud;
 
         public Game1()
         {
@@ -70,14 +73,20 @@ namespace Simulation_etre_vivant
             PixelGeneric normalCarnivorePixel = new PixelGeneric(new Vector2(0, 0), Color.Orange);
             normalCarnivore = new Carnivore("Renard", 750, normalCarnivorePixel, 10, 100f, 0, 1);
 
-            allSeletableBeing = new List<LivingBeing>
+
+            PixelGeneric normalRockPixel = new PixelGeneric(new Vector2(0, 0), Color.DarkSlateGray);
+            normalRock = new Block("Rock", normalRockPixel, 10);
+
+            allSeletableBeing = new List<Block>
             {
                 normalPlant,
                 normalHerbivore,
-                normalCarnivore
+                normalCarnivore,
+                normalRock
             };
 
             Window.AllowUserResizing = true;
+
         }
 
         /// <summary>
@@ -91,8 +100,8 @@ namespace Simulation_etre_vivant
             GameStateManager.ChangeState(GameState.Menu);
             PrimitiveRenderer.Initialize(GraphicsDevice);
             _mouseInputManager = new MouseInputManager();
-            allLivingBeing = new List<LivingBeing>();
-            beingToExist = new List<LivingBeing>();
+            allLivingBeing = new List<Block>();
+            beingToExist = new List<Block>();
         }
 
         /// <summary>
@@ -102,6 +111,8 @@ namespace Simulation_etre_vivant
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<SpriteFont>("Font/Font");
+
+            _hud = new Hud(_font);
         }
 
         #region Update
@@ -183,13 +194,13 @@ namespace Simulation_etre_vivant
 
             HandleMousePlacement();
 
-            foreach (LivingBeing being in beingToExist)
+            foreach (Block being in beingToExist)
             {
                 allLivingBeing.Add(being);
             }
             beingToExist.Clear();
 
-            foreach (LivingBeing being in allLivingBeing)
+            foreach (Block being in allLivingBeing)
             {
                 if (being is Animal animal)
                 {
@@ -197,9 +208,9 @@ namespace Simulation_etre_vivant
                 }
             }
 
-            foreach (LivingBeing dead in allLivingBeing.Where(b => b.Life <= 0).ToList())
+            foreach (Block dead in allLivingBeing.Where(b => b is not null && b.Life <= 0).ToList())
             {
-                RemoveBeing(dead);
+                RemoveBeing(dead);                
             }
 
             if (_input.IsJustPressed(InputAction.MoveLeft))
@@ -300,27 +311,30 @@ namespace Simulation_etre_vivant
                 return;
             }
 
-            if (grid.TryGetValue(next, out LivingBeing occupant) && occupant != null)
+            if (grid.TryGetValue(next, out Block occupant) && occupant != null)
             {
-                if (isPrey(occupant))
+                if (occupant is LivingBeing)
                 {
-                    animal.Life += occupant.Life;
-                    RemoveBeing(occupant);
-                    MoveAnimal(animal, from, next);
-                }
-                else if (occupant.GetType() == animal.GetType() && animal.NbChild < animal.NbMaxChild)
-                {
-                    if (TryFindFreeNeighbor(from, out Point childCell))
+                    if (isPrey((LivingBeing)occupant))
                     {
-                        animal.NbChild++;
-                        LivingBeing child = template.Clone(CellToPosition(childCell));
-                        grid[childCell] = child;
-                        beingToExist.Add(child);
+                        animal.Life += occupant.Life;
+                        RemoveBeing((LivingBeing)occupant);
+                        MoveAnimal(animal, from, next);
                     }
-                }
-                else if (TryFindFreeNeighbor(from, out Point sidestep))
-                {
-                    MoveAnimal(animal, from, sidestep);
+                    else if (occupant.GetType() == animal.GetType() && animal.NbChild < animal.NbMaxChild)
+                    {
+                        if (TryFindFreeNeighbor(from, out Point childCell))
+                        {
+                            animal.NbChild++;
+                            LivingBeing child = template.Clone(CellToPosition(childCell));
+                            grid[childCell] = child;
+                            beingToExist.Add(child);
+                        }
+                    }
+                    else if (TryFindFreeNeighbor(from, out Point sidestep))
+                    {
+                        MoveAnimal(animal, from, sidestep);
+                    }
                 }
             }
             else
@@ -391,7 +405,7 @@ namespace Simulation_etre_vivant
 
             if (_wasMouseDown && !isDown && IsFree(cell))
             {
-                LivingBeing newBeing = allSeletableBeing[indexBeing].Clone(snapped);
+                Block newBeing = allSeletableBeing[indexBeing].Clone(snapped);
                 grid[cell] = newBeing;
                 beingToExist.Add(newBeing);
             }
@@ -419,7 +433,7 @@ namespace Simulation_etre_vivant
 
         private bool IsFree(Point cell)
         {
-            return !grid.TryGetValue(cell, out LivingBeing b) || b == null;
+            return !grid.TryGetValue(cell, out Block b) || b == null;
         }
 
         /// <summary>
@@ -446,15 +460,19 @@ namespace Simulation_etre_vivant
             LivingBeing best = null;
             int bestDist = int.MaxValue;
 
-            foreach (LivingBeing being in allLivingBeing)
+            foreach (Block being in allLivingBeing)
             {
-                if (being == hunter || being.Life <= 0 || !filter(being)) continue;
-
-                int dist = Distance(ToCell(being.Pixel.Position), hc);
-                if (dist < bestDist)
+                if (being is LivingBeing)
                 {
-                    bestDist = dist;
-                    best = being;
+                    if (being == hunter || being.Life <= 0 || !filter((LivingBeing)being)) continue;
+
+                    int dist = Distance(ToCell(being.Pixel.Position), hc);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        best = (LivingBeing)being;
+                    }
+
                 }
             }
             return best;
@@ -504,11 +522,11 @@ namespace Simulation_etre_vivant
         /// <summary>
         /// Retire définitivement un être de la simulation
         /// </summary>
-        private void RemoveBeing(LivingBeing being)
+        private void RemoveBeing(Block being)
         {
             being.Life = 0;
             Point cell = ToCell(being.Pixel.Position);
-            if (grid.TryGetValue(cell, out LivingBeing inCell) && inCell == being)
+            if (grid.TryGetValue(cell, out Block inCell) && inCell == being)
             {
                 grid.Remove(cell);
             }
@@ -548,15 +566,19 @@ namespace Simulation_etre_vivant
 
         private void DrawPlaying(SpriteBatch _spriteBatch)
         {
-            foreach (LivingBeing being in allLivingBeing)
+            foreach (Block being in allLivingBeing)
             {
-                being.Spawn(_spriteBatch);
+                if(being is not null)
+                {
+                    being.Spawn(_spriteBatch);
+                }
             }
 
             if (_mouseInputManager.LeftMouseDown())
             {
                 allSeletableBeing[indexBeing].Spawn(_spriteBatch);
             }
+            _hud.DrawHUD(_spriteBatch, allSeletableBeing[indexBeing], Color.White, this);
         }
 
         #endregion

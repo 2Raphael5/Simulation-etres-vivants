@@ -1,26 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Simulation_etre_vivant.Class.Entite;
 
 namespace Class.Entite
 {
-    public class LivingBeing
+    public class LivingBeing : Block
     {
-        public string Name;
-        public float Life;
-        public PixelGeneric Pixel;
         public float Timer;
         public float TimeBeforeAction;
-        public LivingBeing(string name, float life, PixelGeneric pixel, float time)
+        public LivingBeing(string name, float life, PixelGeneric pixel, float time):base(name, pixel, life)
         {
-            Name = name;
-            Life = life;
-            Pixel = pixel;
             TimeBeforeAction = time;
-        }
-
-        public void Spawn(SpriteBatch _spriteBach)
-        {
-            Pixel.DrawRectangle(_spriteBach);
         }
 
         public void Die()
@@ -28,7 +18,7 @@ namespace Class.Entite
             Pixel = null;
         }
 
-        public virtual LivingBeing Clone(Vector2 position)
+        public override LivingBeing Clone(Vector2 position)
         {
             return new LivingBeing(Name, Life, new PixelGeneric(position, Pixel.Color), TimeBeforeAction);
         }

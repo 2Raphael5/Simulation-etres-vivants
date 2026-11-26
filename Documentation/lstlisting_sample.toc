@@ -1,0 +1,21 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Contexte}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Présentation du projet}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Fonctionnalités réalisées}{2}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Conception}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Architecture générale}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Explication des dossiers important}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Classes principales}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Mécanismes importants}{6}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Réalisation}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Choix techniques}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Algorithmes particuliers}{8}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Difficultés et solutions}{9}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Tests et validation}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Test fonctionnels}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Test unitaires}{9}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Bilan technique}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}État final}{10}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Principales limites connues}{10}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Améliorations pottentiel}{10}{subsection.5.3}%

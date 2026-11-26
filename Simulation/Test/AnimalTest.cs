@@ -24,7 +24,7 @@ namespace Test
         }
 
         [TestMethod]
-        public void Update_LifeIsReducedBy1()
+        public void Update_Update_LifeIsReducedBy1()
         {
             //ARRANGE
             Animal animal = new Animal("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10, 10, 0, 2);

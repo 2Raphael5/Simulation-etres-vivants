@@ -24,7 +24,7 @@ public class LivingBeingTest
     }
 
     [TestMethod]
-    public void Die_PixelIsNull()
+    public void Die_Die_PixelIsNull()
     {
         //ARRANGE
         LivingBeing livingBeing = new LivingBeing("test", 10, new PixelGeneric(new Vector2(0, 0), Color.Blue), 10);
